@@ -1,0 +1,105 @@
+syntax = "proto3";
+
+import "serialrpc.proto";
+
+package a750;
+
+message EchoRequest {
+    int32 n = 1;
+}
+
+message EchoResponse {
+    int32 n = 1;
+}
+
+message SleepRequest {
+    uint32 duration_ms = 1;
+}
+
+service EchoService {
+    option (service_id) = 1;
+
+    rpc echo(EchoRequest) returns (EchoResponse) { option (method_id) = 1; }
+    rpc sleep(SleepRequest) returns (Nothing) { option(method_id) = 2; }
+}
+
+message WriteRequest {
+    uint64 address = 1;
+    bytes data = 2 [(bytes_size) = 512];
+}
+
+message ReadRequest {
+    uint64 address = 1;
+    uint32 length = 2;
+}
+message ReadResult {
+    bytes data = 2 [(bytes_size) = 512];
+}
+
+message JumpRequest {
+    uint64 address = 1;
+}
+
+service DebugService {
+    option (service_id) = 3;
+
+    rpc memory_write(WriteRequest) returns (Nothing) { option(method_id) = 1; }
+    rpc memory_read(ReadRequest) returns (ReadResult) { option(method_id) = 5; }
+    
+    rpc storage_write(WriteRequest) returns (Nothing) { option(method_id) = 4; }
+    rpc storage_read(ReadRequest) returns (ReadResult) { option(method_id) = 6; }
+
+    rpc reboot(Nothing) returns (Nothing) { option(method_id) = 2; }
+    rpc jump(JumpRequest) returns (Nothing) { option(method_id) = 3; }
+} ;
+message CANFrame {
+    uint32 id   = 1;
+    bytes  data = 2 [(bytes_size) = 64];
+
+    bool fd = 3;
+}
+
+message CANRecvRequest {
+
+}
+
+service CANService {
+    option (service_id) = 2;
+
+    rpc send(CANFrame) returns (Nothing) { option (method_id) = 1; }
+
+    rpc recv(CANRecvRequest) returns (stream CANFrame) { option (method_id) = 2; }
+}
+
+message LogItem {
+    string text = 1;
+}
+
+service LogService {
+    option (service_id) = 4;
+
+    rpc recv(Nothing) returns (stream LogItem) { option (method_id) = 1; }
+}
+
+message Joint {
+    float pos_rad = 1;
+    float vel_rad_s = 2;
+    float torque_rad_s = 3;
+    int32 temp_mosfet_c = 4;
+    int32 temp_rotor_c = 5;
+}
+
+message ReadJointsResponse {
+    Joint joint1 = 1;
+    Joint joint2 = 2;
+    Joint joint3 = 3;
+    Joint joint4 = 4;
+    Joint joint5 = 5;
+    Joint joint6 = 6;
+}
+
+service RobotService {
+    option (service_id) = 5;
+    
+    rpc read_joints(Nothing) returns (ReadJointsResponse) { option (method_id) = 1; }
+}
