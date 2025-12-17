@@ -12,6 +12,13 @@
 namespace a750pb {
     struct RPCServer;
 
+    enum class RobotState {
+        Startup = 0,
+        Active = 1,
+        EStop = 2,
+        Error = 3
+    };
+
     struct EchoRequest {
         static void marshal(EchoRequest const &req, lib::io::Writer &out, lib::error err, int nesting, serialrpc::Stack &stack);
 
@@ -144,6 +151,70 @@ namespace a750pb {
         static const uint32_t TextFieldNumber = 1;
     };
 
+    struct Joint {
+        static void marshal(Joint const &req, lib::io::Writer &out, lib::error err, int nesting, serialrpc::Stack &stack);
+
+        static Joint unmarshal(lib::io::Reader &in, lib::error err, int nesting = 128);
+
+        bool operator==(const Joint& other) const;
+
+        float pos_rad = {};
+
+        float vel_rad_s = {};
+
+        float torque_rad_s = {};
+
+        int32_t temp_mosfet_c = {};
+
+        int32_t temp_rotor_c = {};
+
+        static const uint32_t PosRadFieldNumber = 1;
+
+        static const uint32_t VelRadSFieldNumber = 2;
+
+        static const uint32_t TorqueRadSFieldNumber = 3;
+
+        static const uint32_t TempMosfetCFieldNumber = 4;
+
+        static const uint32_t TempRotorCFieldNumber = 5;
+    };
+
+    struct ReadJointsResponse {
+        static void marshal(ReadJointsResponse const &req, lib::io::Writer &out, lib::error err, int nesting, serialrpc::Stack &stack);
+
+        static ReadJointsResponse unmarshal(lib::io::Reader &in, lib::error err, int nesting = 128);
+
+        bool operator==(const ReadJointsResponse& other) const;
+
+        a750pb::RobotState robot_state = {};
+
+        a750pb::Joint joint1 = {};
+
+        a750pb::Joint joint2 = {};
+
+        a750pb::Joint joint3 = {};
+
+        a750pb::Joint joint4 = {};
+
+        a750pb::Joint joint5 = {};
+
+        a750pb::Joint joint6 = {};
+
+        static const uint32_t RobotStateFieldNumber = 7;
+
+        static const uint32_t Joint1FieldNumber = 1;
+
+        static const uint32_t Joint2FieldNumber = 2;
+
+        static const uint32_t Joint3FieldNumber = 3;
+
+        static const uint32_t Joint4FieldNumber = 4;
+
+        static const uint32_t Joint5FieldNumber = 5;
+
+        static const uint32_t Joint6FieldNumber = 6;
+    };
+
     struct EchoService {
         virtual EchoResponse echo(EchoRequest const &req, lib::error err) = 0;
 
@@ -176,5 +247,9 @@ namespace a750pb {
         virtual void subscribe_recv(RPCServer &server, lib::error err) = 0;
 
         virtual void unsubscribe_recv() = 0;
+    };
+
+    struct RobotService {
+        virtual ReadJointsResponse read_joints(lib::error err) = 0;
     };
 }

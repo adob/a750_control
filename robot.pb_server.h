@@ -14,7 +14,7 @@ namespace a750pb {
     struct RPCServer;
 
     struct RPCServer : serialrpc::ServerBase {
-        explicit RPCServer(EchoService &echo_service, CANService &can_service, DebugService &debug_service, LogService &log_service);
+        explicit RPCServer(EchoService &echo_service, CANService &can_service, DebugService &debug_service, LogService &log_service, RobotService &robot_service);
 
         void send_CANService_recv(CANFrame const &msg);
 
@@ -27,6 +27,8 @@ namespace a750pb {
         DebugService& debug_service;
 
         LogService& log_service;
+
+        RobotService& robot_service;
 
         void handle_request(lib::uint32 rpc_id, lib::io::ReaderWriter &conn, lib::error err) override;
 

@@ -81,6 +81,13 @@ service LogService {
     rpc recv(Nothing) returns (stream LogItem) { option (method_id) = 1; }
 }
 
+enum RobotState {
+    Startup = 0;
+    Active = 1;
+    EStop = 2;
+    Error = 3;
+}
+
 message Joint {
     float pos_rad = 1;
     float vel_rad_s = 2;
@@ -90,6 +97,8 @@ message Joint {
 }
 
 message ReadJointsResponse {
+    RobotState robot_state = 7;
+
     Joint joint1 = 1;
     Joint joint2 = 2;
     Joint joint3 = 3;

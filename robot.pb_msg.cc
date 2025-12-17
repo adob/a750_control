@@ -441,6 +441,177 @@ namespace a750pb {
         return text == other.text;
     }
 
+    void Joint::marshal(Joint const &req, lib::io::Writer &out, lib::error err, int nesting, serialrpc::Stack &stack) {
+        serialrpc::marshal_field(out, req.PosRadFieldNumber, req.pos_rad, err, nesting-1, stack);
+        if (err) {
+            return;
+        }
+        serialrpc::marshal_field(out, req.VelRadSFieldNumber, req.vel_rad_s, err, nesting-1, stack);
+        if (err) {
+            return;
+        }
+        serialrpc::marshal_field(out, req.TorqueRadSFieldNumber, req.torque_rad_s, err, nesting-1, stack);
+        if (err) {
+            return;
+        }
+        serialrpc::marshal_field(out, req.TempMosfetCFieldNumber, req.temp_mosfet_c, err, nesting-1, stack);
+        if (err) {
+            return;
+        }
+        serialrpc::marshal_field(out, req.TempRotorCFieldNumber, req.temp_rotor_c, err, nesting-1, stack);
+        if (err) {
+            return;
+        }
+    }
+
+    Joint Joint::unmarshal(lib::io::Reader &in, lib::error err, int nesting) {
+        Joint msg;
+
+        for (;;) {
+            serialrpc::Tag tag = serialrpc::read_tag(in, err);
+            if (err) {
+                return msg;
+            }
+
+            if (tag.type == serialrpc::Tag::End) {
+                return msg;
+            }
+
+            switch (tag.field_num) {
+            case PosRadFieldNumber:
+                msg.pos_rad = serialrpc::unmarshal<float>(in, err, nesting-1);
+                break;
+
+            case VelRadSFieldNumber:
+                msg.vel_rad_s = serialrpc::unmarshal<float>(in, err, nesting-1);
+                break;
+
+            case TorqueRadSFieldNumber:
+                msg.torque_rad_s = serialrpc::unmarshal<float>(in, err, nesting-1);
+                break;
+
+            case TempMosfetCFieldNumber:
+                msg.temp_mosfet_c = serialrpc::unmarshal<int32_t>(in, err, nesting-1);
+                break;
+
+            case TempRotorCFieldNumber:
+                msg.temp_rotor_c = serialrpc::unmarshal<int32_t>(in, err, nesting-1);
+                break;
+
+            default:
+                serialrpc::skip(in, tag.type, err, nesting-1);
+                if (err) {
+                    return msg;
+                }
+            }
+        }
+
+        return msg;
+    }
+
+    bool Joint::operator==(const Joint& other) const {
+        return pos_rad == other.pos_rad
+            && vel_rad_s == other.vel_rad_s
+            && torque_rad_s == other.torque_rad_s
+            && temp_mosfet_c == other.temp_mosfet_c
+            && temp_rotor_c == other.temp_rotor_c;
+    }
+
+    void ReadJointsResponse::marshal(ReadJointsResponse const &req, lib::io::Writer &out, lib::error err, int nesting, serialrpc::Stack &stack) {
+        serialrpc::marshal_field(out, req.RobotStateFieldNumber, int32(req.robot_state), err, nesting-1, stack);
+        if (err) {
+            return;
+        }
+        serialrpc::marshal_field(out, req.Joint1FieldNumber, req.joint1, err, nesting-1, stack);
+        if (err) {
+            return;
+        }
+        serialrpc::marshal_field(out, req.Joint2FieldNumber, req.joint2, err, nesting-1, stack);
+        if (err) {
+            return;
+        }
+        serialrpc::marshal_field(out, req.Joint3FieldNumber, req.joint3, err, nesting-1, stack);
+        if (err) {
+            return;
+        }
+        serialrpc::marshal_field(out, req.Joint4FieldNumber, req.joint4, err, nesting-1, stack);
+        if (err) {
+            return;
+        }
+        serialrpc::marshal_field(out, req.Joint5FieldNumber, req.joint5, err, nesting-1, stack);
+        if (err) {
+            return;
+        }
+        serialrpc::marshal_field(out, req.Joint6FieldNumber, req.joint6, err, nesting-1, stack);
+        if (err) {
+            return;
+        }
+    }
+
+    ReadJointsResponse ReadJointsResponse::unmarshal(lib::io::Reader &in, lib::error err, int nesting) {
+        ReadJointsResponse msg;
+
+        for (;;) {
+            serialrpc::Tag tag = serialrpc::read_tag(in, err);
+            if (err) {
+                return msg;
+            }
+
+            if (tag.type == serialrpc::Tag::End) {
+                return msg;
+            }
+
+            switch (tag.field_num) {
+            case RobotStateFieldNumber:
+                msg.robot_state = (a750pb::RobotState) serialrpc::unmarshal<int32>(in, err, nesting-1);
+                break;
+
+            case Joint1FieldNumber:
+                msg.joint1 = serialrpc::unmarshal<a750pb::Joint>(in, err, nesting-1);
+                break;
+
+            case Joint2FieldNumber:
+                msg.joint2 = serialrpc::unmarshal<a750pb::Joint>(in, err, nesting-1);
+                break;
+
+            case Joint3FieldNumber:
+                msg.joint3 = serialrpc::unmarshal<a750pb::Joint>(in, err, nesting-1);
+                break;
+
+            case Joint4FieldNumber:
+                msg.joint4 = serialrpc::unmarshal<a750pb::Joint>(in, err, nesting-1);
+                break;
+
+            case Joint5FieldNumber:
+                msg.joint5 = serialrpc::unmarshal<a750pb::Joint>(in, err, nesting-1);
+                break;
+
+            case Joint6FieldNumber:
+                msg.joint6 = serialrpc::unmarshal<a750pb::Joint>(in, err, nesting-1);
+                break;
+
+            default:
+                serialrpc::skip(in, tag.type, err, nesting-1);
+                if (err) {
+                    return msg;
+                }
+            }
+        }
+
+        return msg;
+    }
+
+    bool ReadJointsResponse::operator==(const ReadJointsResponse& other) const {
+        return robot_state == other.robot_state
+            && joint1 == other.joint1
+            && joint2 == other.joint2
+            && joint3 == other.joint3
+            && joint4 == other.joint4
+            && joint5 == other.joint5
+            && joint6 == other.joint6;
+    }
+
+
 
 
 

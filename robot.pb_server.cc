@@ -7,11 +7,12 @@
 using namespace lib;
 
 namespace a750pb {
-    RPCServer::RPCServer(EchoService &echo_service, CANService &can_service, DebugService &debug_service, LogService &log_service)
+    RPCServer::RPCServer(EchoService &echo_service, CANService &can_service, DebugService &debug_service, LogService &log_service, RobotService &robot_service)
         : echo_service(echo_service)
         , can_service(can_service)
         , debug_service(debug_service)
         , log_service(log_service)
+        , robot_service(robot_service)
     {}
 
     void RPCServer::send_CANService_recv(CANFrame const &msg) {
@@ -205,6 +206,22 @@ namespace a750pb {
                 log_service.unsubscribe_recv();
             }
             send_code(conn, serialrpc::Reply, err);
+            if (err) {
+                return;
+            }
+            break;
+        }
+        case 12: {
+            serialrpc::skip(conn, err);
+            if (err) {
+                return;
+            }
+            RPCServer::ServerErrorHandler handler_err(*this, err);
+            ReadJointsResponse resp = robot_service.read_joints(handler_err);
+            if (err || handler_err) {
+                return;
+            }
+            send_reply_msg(conn, resp, err);
             if (err) {
                 return;
             }

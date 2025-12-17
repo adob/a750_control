@@ -13,6 +13,7 @@ namespace a750pb {
         , can_service(*this)
         , debug_service(*this)
         , log_service(*this)
+        , robot_service(*this)
     {}
 
     RPCClient::RPCClient(std::shared_ptr<lib::io::ReaderWriter> const &conn)
@@ -21,6 +22,7 @@ namespace a750pb {
         , can_service(*this)
         , debug_service(*this)
         , log_service(*this)
+        , robot_service(*this)
     {}
 
     RPCClient::EchoServiceStub::EchoServiceStub(RPCClient &client)
@@ -121,6 +123,14 @@ namespace a750pb {
         if (this->recv_cb) {
             this->recv_cb(msg);
         }
+    }
+
+    RPCClient::RobotServiceStub::RobotServiceStub(RPCClient &client)
+        : client(client)
+    {}
+
+    ReadJointsResponse RPCClient::RobotServiceStub::read_joints(lib::error err) {
+        return this->client.call<ReadJointsResponse>(12, err);
     }
 
     void RPCClient::handle_event(lib::uint32 event_id, lib::error err) {

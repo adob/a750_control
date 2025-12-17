@@ -84,6 +84,16 @@ namespace a750pb {
             void handle_recv(LogItem const &msg);
         } log_service;
 
+        struct RobotServiceStub {
+            RPCClient& client;
+
+            lib::sync::Mutex mtx;
+
+            explicit RobotServiceStub(RPCClient &client);
+
+            ReadJointsResponse read_joints(lib::error err);
+        } robot_service;
+
         void handle_event(lib::uint32 event_id, lib::error err) override;
     };
 }
