@@ -30,11 +30,11 @@ namespace a750pb {
     {}
 
     EchoResponse RPCClient::EchoServiceStub::echo(EchoRequest const &req, lib::error err) {
-        return this->client.call<EchoRequest const&, EchoResponse>(1, req, err);
+        return this->client.call<EchoRequest const&, EchoResponse>(1, ServiceName, "echo", req, err);
     }
 
     void RPCClient::EchoServiceStub::sleep(SleepRequest const &req, lib::error err) {
-        this->client.call_void<SleepRequest const&>(2, req, err);
+        this->client.call_void<SleepRequest const&>(2, ServiceName, "sleep", req, err);
     }
 
     RPCClient::CANServiceStub::CANServiceStub(RPCClient &client)
@@ -42,7 +42,7 @@ namespace a750pb {
     {}
 
     void RPCClient::CANServiceStub::send(CANFrame const &req, lib::error err) {
-        this->client.call_void<CANFrame const&>(3, req, err);
+        this->client.call_void<CANFrame const&>(3, ServiceName, "send", req, err);
     }
 
     void RPCClient::CANServiceStub::subscribe_recv(CANRecvRequest const &req, std::function<void(CANFrame const&)> const &cb, lib::error err) {
@@ -50,12 +50,12 @@ namespace a750pb {
             sync::Lock lock(this->mtx);
             this->recv_cb = cb;
         }
-        this->client.subscribe(4, req, err);
+        this->client.subscribe(4, ServiceName, "recv", req, err);
     }
 
     void RPCClient::CANServiceStub::unsubscribe_recv(lib::error err) {
         sync::Lock lock(this->mtx);
-        this->client.unsubscribe(4, err);
+        this->client.unsubscribe(4, ServiceName, "recv", err);
         if (err) {
             return;
         }
@@ -74,27 +74,27 @@ namespace a750pb {
     {}
 
     void RPCClient::DebugServiceStub::memory_write(WriteRequest const &req, lib::error err) {
-        this->client.call_void<WriteRequest const&>(5, req, err);
+        this->client.call_void<WriteRequest const&>(5, ServiceName, "memory_write", req, err);
     }
 
     void RPCClient::DebugServiceStub::reboot(lib::error err) {
-        this->client.call_void(6, err);
+        this->client.call_void(6, ServiceName, "reboot", err);
     }
 
     void RPCClient::DebugServiceStub::jump(JumpRequest const &req, lib::error err) {
-        this->client.call_void<JumpRequest const&>(7, req, err);
+        this->client.call_void<JumpRequest const&>(7, ServiceName, "jump", req, err);
     }
 
     void RPCClient::DebugServiceStub::storage_write(WriteRequest const &req, lib::error err) {
-        this->client.call_void<WriteRequest const&>(8, req, err);
+        this->client.call_void<WriteRequest const&>(8, ServiceName, "storage_write", req, err);
     }
 
     ReadResult RPCClient::DebugServiceStub::memory_read(ReadRequest const &req, lib::error err) {
-        return this->client.call<ReadRequest const&, ReadResult>(9, req, err);
+        return this->client.call<ReadRequest const&, ReadResult>(9, ServiceName, "memory_read", req, err);
     }
 
     ReadResult RPCClient::DebugServiceStub::storage_read(ReadRequest const &req, lib::error err) {
-        return this->client.call<ReadRequest const&, ReadResult>(10, req, err);
+        return this->client.call<ReadRequest const&, ReadResult>(10, ServiceName, "storage_read", req, err);
     }
 
     RPCClient::LogServiceStub::LogServiceStub(RPCClient &client)
@@ -106,12 +106,12 @@ namespace a750pb {
             sync::Lock lock(this->mtx);
             this->recv_cb = cb;
         }
-        this->client.subscribe(11, err);
+        this->client.subscribe(11, ServiceName, "recv", err);
     }
 
     void RPCClient::LogServiceStub::unsubscribe_recv(lib::error err) {
         sync::Lock lock(this->mtx);
-        this->client.unsubscribe(11, err);
+        this->client.unsubscribe(11, ServiceName, "recv", err);
         if (err) {
             return;
         }
@@ -129,8 +129,20 @@ namespace a750pb {
         : client(client)
     {}
 
-    ReadJointsResponse RPCClient::RobotServiceStub::read_joints(lib::error err) {
-        return this->client.call<ReadJointsResponse>(12, err);
+    RobotState RPCClient::RobotServiceStub::read_state(lib::error err) {
+        return this->client.call<RobotState>(12, ServiceName, "read_state", err);
+    }
+
+    RobotState RPCClient::RobotServiceStub::start_realtime_control(lib::error err) {
+        return this->client.call<RobotState>(13, ServiceName, "start_realtime_control", err);
+    }
+
+    RobotState RPCClient::RobotServiceStub::command_joints(CommandJointsRequest const &req, lib::error err) {
+        return this->client.call<CommandJointsRequest const&, RobotState>(14, ServiceName, "command_joints", req, err);
+    }
+
+    void RPCClient::RobotServiceStub::stop_realtime_control(lib::error err) {
+        this->client.call_void(15, ServiceName, "stop_realtime_control", err);
     }
 
     void RPCClient::handle_event(lib::uint32 event_id, lib::error err) {

@@ -12,13 +12,6 @@
 namespace a750pb {
     struct RPCServer;
 
-    enum class RobotState {
-        Startup = 0,
-        Active = 1,
-        EStop = 2,
-        Error = 3
-    };
-
     struct EchoRequest {
         static void marshal(EchoRequest const &req, lib::io::Writer &out, lib::error err, int nesting, serialrpc::Stack &stack);
 
@@ -179,28 +172,95 @@ namespace a750pb {
         static const uint32_t TempRotorCFieldNumber = 5;
     };
 
-    struct ReadJointsResponse {
-        static void marshal(ReadJointsResponse const &req, lib::io::Writer &out, lib::error err, int nesting, serialrpc::Stack &stack);
+    struct RobotState {
+        enum Mode {
+            Startup = 0,
+            Enabled = 1,
+            Stopped = 2,
+            Fault = 3
+        };
 
-        static ReadJointsResponse unmarshal(lib::io::Reader &in, lib::error err, int nesting = 128);
+        static void marshal(RobotState const &req, lib::io::Writer &out, lib::error err, int nesting, serialrpc::Stack &stack);
 
-        bool operator==(const ReadJointsResponse& other) const;
+        static RobotState unmarshal(lib::io::Reader &in, lib::error err, int nesting = 128);
 
-        a750pb::RobotState robot_state = {};
+        bool operator==(const RobotState& other) const;
 
-        a750pb::Joint joint1 = {};
+        Mode mode = {};
 
-        a750pb::Joint joint2 = {};
+        Joint joint1 = {};
 
-        a750pb::Joint joint3 = {};
+        Joint joint2 = {};
 
-        a750pb::Joint joint4 = {};
+        Joint joint3 = {};
 
-        a750pb::Joint joint5 = {};
+        Joint joint4 = {};
 
-        a750pb::Joint joint6 = {};
+        Joint joint5 = {};
 
-        static const uint32_t RobotStateFieldNumber = 7;
+        Joint joint6 = {};
+
+        static const uint32_t ModeFieldNumber = 1;
+
+        static const uint32_t Joint1FieldNumber = 2;
+
+        static const uint32_t Joint2FieldNumber = 3;
+
+        static const uint32_t Joint3FieldNumber = 4;
+
+        static const uint32_t Joint4FieldNumber = 5;
+
+        static const uint32_t Joint5FieldNumber = 6;
+
+        static const uint32_t Joint6FieldNumber = 7;
+    };
+
+    struct JointCommand {
+        static void marshal(JointCommand const &req, lib::io::Writer &out, lib::error err, int nesting, serialrpc::Stack &stack);
+
+        static JointCommand unmarshal(lib::io::Reader &in, lib::error err, int nesting = 128);
+
+        bool operator==(const JointCommand& other) const;
+
+        float pos_setpoint_rad = {};
+
+        float pos_gain_nm_rad = {};
+
+        float vel_setpoint_rad_s = {};
+
+        float vel_gain_nms_rad = {};
+
+        float torque_nm = {};
+
+        static const uint32_t PosSetpointRadFieldNumber = 1;
+
+        static const uint32_t PosGainNmRadFieldNumber = 2;
+
+        static const uint32_t VelSetpointRadSFieldNumber = 3;
+
+        static const uint32_t VelGainNmsRadFieldNumber = 4;
+
+        static const uint32_t TorqueNmFieldNumber = 5;
+    };
+
+    struct CommandJointsRequest {
+        static void marshal(CommandJointsRequest const &req, lib::io::Writer &out, lib::error err, int nesting, serialrpc::Stack &stack);
+
+        static CommandJointsRequest unmarshal(lib::io::Reader &in, lib::error err, int nesting = 128);
+
+        bool operator==(const CommandJointsRequest& other) const;
+
+        JointCommand joint1 = {};
+
+        JointCommand joint2 = {};
+
+        JointCommand joint3 = {};
+
+        JointCommand joint4 = {};
+
+        JointCommand joint5 = {};
+
+        JointCommand joint6 = {};
 
         static const uint32_t Joint1FieldNumber = 1;
 
@@ -250,6 +310,12 @@ namespace a750pb {
     };
 
     struct RobotService {
-        virtual ReadJointsResponse read_joints(lib::error err) = 0;
+        virtual RobotState read_state(lib::error err) = 0;
+
+        virtual RobotState start_realtime_control(lib::error err) = 0;
+
+        virtual void stop_realtime_control(lib::error err) = 0;
+
+        virtual RobotState command_joints(CommandJointsRequest const &req, lib::error err) = 0;
     };
 }

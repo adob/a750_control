@@ -81,34 +81,56 @@ service LogService {
     rpc recv(Nothing) returns (stream LogItem) { option (method_id) = 1; }
 }
 
-enum RobotState {
-    Startup = 0;
-    Active = 1;
-    EStop = 2;
-    Error = 3;
-}
-
 message Joint {
-    float pos_rad = 1;
-    float vel_rad_s = 2;
-    float torque_rad_s = 3;
+    float pos_rad       = 1;
+    float vel_rad_s     = 2;
+    float torque_rad_s  = 3;
     int32 temp_mosfet_c = 4;
-    int32 temp_rotor_c = 5;
+    int32 temp_rotor_c  = 5;
 }
 
-message ReadJointsResponse {
-    RobotState robot_state = 7;
+message RobotState {
+    enum Mode {
+        Startup = 0;
+        Enabled = 1;
+        Stopped = 2;
+        Fault  = 3;
+    }
 
-    Joint joint1 = 1;
-    Joint joint2 = 2;
-    Joint joint3 = 3;
-    Joint joint4 = 4;
-    Joint joint5 = 5;
-    Joint joint6 = 6;
+    Mode mode = 1;
+
+    Joint joint1 = 2;
+    Joint joint2 = 3;
+    Joint joint3 = 4;
+    Joint joint4 = 5;
+    Joint joint5 = 6;
+    Joint joint6 = 7;
+}
+
+message JointCommand {
+    float pos_setpoint_rad = 1;
+    float pos_gain_nm_rad = 2;
+
+    float vel_setpoint_rad_s = 3;
+    float vel_gain_nms_rad = 4;
+
+    float torque_nm = 5;
+}
+
+message CommandJointsRequest {
+    JointCommand joint1 = 1;
+    JointCommand joint2 = 2;
+    JointCommand joint3 = 3;
+    JointCommand joint4 = 4;
+    JointCommand joint5 = 5;
+    JointCommand joint6 = 6;
 }
 
 service RobotService {
     option (service_id) = 5;
     
-    rpc read_joints(Nothing) returns (ReadJointsResponse) { option (method_id) = 1; }
+    rpc read_state(Nothing) returns (RobotState) { option (method_id) = 1; }
+    rpc start_realtime_control(Nothing) returns (RobotState) { option (method_id) = 1; }
+    rpc stop_realtime_control(Nothing) returns (Nothing) { option (method_id) = 2; }
+    rpc command_joints(CommandJointsRequest) returns (RobotState) { option (method_id) = 1; }
 }

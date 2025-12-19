@@ -517,8 +517,8 @@ namespace a750pb {
             && temp_rotor_c == other.temp_rotor_c;
     }
 
-    void ReadJointsResponse::marshal(ReadJointsResponse const &req, lib::io::Writer &out, lib::error err, int nesting, serialrpc::Stack &stack) {
-        serialrpc::marshal_field(out, req.RobotStateFieldNumber, int32(req.robot_state), err, nesting-1, stack);
+    void RobotState::marshal(RobotState const &req, lib::io::Writer &out, lib::error err, int nesting, serialrpc::Stack &stack) {
+        serialrpc::marshal_field(out, req.ModeFieldNumber, int32(req.mode), err, nesting-1, stack);
         if (err) {
             return;
         }
@@ -548,8 +548,8 @@ namespace a750pb {
         }
     }
 
-    ReadJointsResponse ReadJointsResponse::unmarshal(lib::io::Reader &in, lib::error err, int nesting) {
-        ReadJointsResponse msg;
+    RobotState RobotState::unmarshal(lib::io::Reader &in, lib::error err, int nesting) {
+        RobotState msg;
 
         for (;;) {
             serialrpc::Tag tag = serialrpc::read_tag(in, err);
@@ -562,32 +562,32 @@ namespace a750pb {
             }
 
             switch (tag.field_num) {
-            case RobotStateFieldNumber:
-                msg.robot_state = (a750pb::RobotState) serialrpc::unmarshal<int32>(in, err, nesting-1);
+            case ModeFieldNumber:
+                msg.mode = (Mode) serialrpc::unmarshal<int32>(in, err, nesting-1);
                 break;
 
             case Joint1FieldNumber:
-                msg.joint1 = serialrpc::unmarshal<a750pb::Joint>(in, err, nesting-1);
+                msg.joint1 = serialrpc::unmarshal<Joint>(in, err, nesting-1);
                 break;
 
             case Joint2FieldNumber:
-                msg.joint2 = serialrpc::unmarshal<a750pb::Joint>(in, err, nesting-1);
+                msg.joint2 = serialrpc::unmarshal<Joint>(in, err, nesting-1);
                 break;
 
             case Joint3FieldNumber:
-                msg.joint3 = serialrpc::unmarshal<a750pb::Joint>(in, err, nesting-1);
+                msg.joint3 = serialrpc::unmarshal<Joint>(in, err, nesting-1);
                 break;
 
             case Joint4FieldNumber:
-                msg.joint4 = serialrpc::unmarshal<a750pb::Joint>(in, err, nesting-1);
+                msg.joint4 = serialrpc::unmarshal<Joint>(in, err, nesting-1);
                 break;
 
             case Joint5FieldNumber:
-                msg.joint5 = serialrpc::unmarshal<a750pb::Joint>(in, err, nesting-1);
+                msg.joint5 = serialrpc::unmarshal<Joint>(in, err, nesting-1);
                 break;
 
             case Joint6FieldNumber:
-                msg.joint6 = serialrpc::unmarshal<a750pb::Joint>(in, err, nesting-1);
+                msg.joint6 = serialrpc::unmarshal<Joint>(in, err, nesting-1);
                 break;
 
             default:
@@ -601,9 +601,170 @@ namespace a750pb {
         return msg;
     }
 
-    bool ReadJointsResponse::operator==(const ReadJointsResponse& other) const {
-        return robot_state == other.robot_state
+    bool RobotState::operator==(const RobotState& other) const {
+        return mode == other.mode
             && joint1 == other.joint1
+            && joint2 == other.joint2
+            && joint3 == other.joint3
+            && joint4 == other.joint4
+            && joint5 == other.joint5
+            && joint6 == other.joint6;
+    }
+
+    void JointCommand::marshal(JointCommand const &req, lib::io::Writer &out, lib::error err, int nesting, serialrpc::Stack &stack) {
+        serialrpc::marshal_field(out, req.PosSetpointRadFieldNumber, req.pos_setpoint_rad, err, nesting-1, stack);
+        if (err) {
+            return;
+        }
+        serialrpc::marshal_field(out, req.PosGainNmRadFieldNumber, req.pos_gain_nm_rad, err, nesting-1, stack);
+        if (err) {
+            return;
+        }
+        serialrpc::marshal_field(out, req.VelSetpointRadSFieldNumber, req.vel_setpoint_rad_s, err, nesting-1, stack);
+        if (err) {
+            return;
+        }
+        serialrpc::marshal_field(out, req.VelGainNmsRadFieldNumber, req.vel_gain_nms_rad, err, nesting-1, stack);
+        if (err) {
+            return;
+        }
+        serialrpc::marshal_field(out, req.TorqueNmFieldNumber, req.torque_nm, err, nesting-1, stack);
+        if (err) {
+            return;
+        }
+    }
+
+    JointCommand JointCommand::unmarshal(lib::io::Reader &in, lib::error err, int nesting) {
+        JointCommand msg;
+
+        for (;;) {
+            serialrpc::Tag tag = serialrpc::read_tag(in, err);
+            if (err) {
+                return msg;
+            }
+
+            if (tag.type == serialrpc::Tag::End) {
+                return msg;
+            }
+
+            switch (tag.field_num) {
+            case PosSetpointRadFieldNumber:
+                msg.pos_setpoint_rad = serialrpc::unmarshal<float>(in, err, nesting-1);
+                break;
+
+            case PosGainNmRadFieldNumber:
+                msg.pos_gain_nm_rad = serialrpc::unmarshal<float>(in, err, nesting-1);
+                break;
+
+            case VelSetpointRadSFieldNumber:
+                msg.vel_setpoint_rad_s = serialrpc::unmarshal<float>(in, err, nesting-1);
+                break;
+
+            case VelGainNmsRadFieldNumber:
+                msg.vel_gain_nms_rad = serialrpc::unmarshal<float>(in, err, nesting-1);
+                break;
+
+            case TorqueNmFieldNumber:
+                msg.torque_nm = serialrpc::unmarshal<float>(in, err, nesting-1);
+                break;
+
+            default:
+                serialrpc::skip(in, tag.type, err, nesting-1);
+                if (err) {
+                    return msg;
+                }
+            }
+        }
+
+        return msg;
+    }
+
+    bool JointCommand::operator==(const JointCommand& other) const {
+        return pos_setpoint_rad == other.pos_setpoint_rad
+            && pos_gain_nm_rad == other.pos_gain_nm_rad
+            && vel_setpoint_rad_s == other.vel_setpoint_rad_s
+            && vel_gain_nms_rad == other.vel_gain_nms_rad
+            && torque_nm == other.torque_nm;
+    }
+
+    void CommandJointsRequest::marshal(CommandJointsRequest const &req, lib::io::Writer &out, lib::error err, int nesting, serialrpc::Stack &stack) {
+        serialrpc::marshal_field(out, req.Joint1FieldNumber, req.joint1, err, nesting-1, stack);
+        if (err) {
+            return;
+        }
+        serialrpc::marshal_field(out, req.Joint2FieldNumber, req.joint2, err, nesting-1, stack);
+        if (err) {
+            return;
+        }
+        serialrpc::marshal_field(out, req.Joint3FieldNumber, req.joint3, err, nesting-1, stack);
+        if (err) {
+            return;
+        }
+        serialrpc::marshal_field(out, req.Joint4FieldNumber, req.joint4, err, nesting-1, stack);
+        if (err) {
+            return;
+        }
+        serialrpc::marshal_field(out, req.Joint5FieldNumber, req.joint5, err, nesting-1, stack);
+        if (err) {
+            return;
+        }
+        serialrpc::marshal_field(out, req.Joint6FieldNumber, req.joint6, err, nesting-1, stack);
+        if (err) {
+            return;
+        }
+    }
+
+    CommandJointsRequest CommandJointsRequest::unmarshal(lib::io::Reader &in, lib::error err, int nesting) {
+        CommandJointsRequest msg;
+
+        for (;;) {
+            serialrpc::Tag tag = serialrpc::read_tag(in, err);
+            if (err) {
+                return msg;
+            }
+
+            if (tag.type == serialrpc::Tag::End) {
+                return msg;
+            }
+
+            switch (tag.field_num) {
+            case Joint1FieldNumber:
+                msg.joint1 = serialrpc::unmarshal<JointCommand>(in, err, nesting-1);
+                break;
+
+            case Joint2FieldNumber:
+                msg.joint2 = serialrpc::unmarshal<JointCommand>(in, err, nesting-1);
+                break;
+
+            case Joint3FieldNumber:
+                msg.joint3 = serialrpc::unmarshal<JointCommand>(in, err, nesting-1);
+                break;
+
+            case Joint4FieldNumber:
+                msg.joint4 = serialrpc::unmarshal<JointCommand>(in, err, nesting-1);
+                break;
+
+            case Joint5FieldNumber:
+                msg.joint5 = serialrpc::unmarshal<JointCommand>(in, err, nesting-1);
+                break;
+
+            case Joint6FieldNumber:
+                msg.joint6 = serialrpc::unmarshal<JointCommand>(in, err, nesting-1);
+                break;
+
+            default:
+                serialrpc::skip(in, tag.type, err, nesting-1);
+                if (err) {
+                    return msg;
+                }
+            }
+        }
+
+        return msg;
+    }
+
+    bool CommandJointsRequest::operator==(const CommandJointsRequest& other) const {
+        return joint1 == other.joint1
             && joint2 == other.joint2
             && joint3 == other.joint3
             && joint4 == other.joint4

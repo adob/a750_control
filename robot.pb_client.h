@@ -19,6 +19,8 @@ namespace a750pb {
         explicit RPCClient(std::shared_ptr<lib::io::ReaderWriter> const &conn);
 
         struct EchoServiceStub {
+            static constexpr char ServiceName[] = "EchoService";
+
             RPCClient& client;
 
             lib::sync::Mutex mtx;
@@ -31,6 +33,8 @@ namespace a750pb {
         } echo_service;
 
         struct CANServiceStub {
+            static constexpr char ServiceName[] = "CANService";
+
             RPCClient& client;
 
             lib::sync::Mutex mtx;
@@ -49,6 +53,8 @@ namespace a750pb {
         } can_service;
 
         struct DebugServiceStub {
+            static constexpr char ServiceName[] = "DebugService";
+
             RPCClient& client;
 
             lib::sync::Mutex mtx;
@@ -69,6 +75,8 @@ namespace a750pb {
         } debug_service;
 
         struct LogServiceStub {
+            static constexpr char ServiceName[] = "LogService";
+
             RPCClient& client;
 
             lib::sync::Mutex mtx;
@@ -85,13 +93,21 @@ namespace a750pb {
         } log_service;
 
         struct RobotServiceStub {
+            static constexpr char ServiceName[] = "RobotService";
+
             RPCClient& client;
 
             lib::sync::Mutex mtx;
 
             explicit RobotServiceStub(RPCClient &client);
 
-            ReadJointsResponse read_joints(lib::error err);
+            RobotState read_state(lib::error err);
+
+            RobotState start_realtime_control(lib::error err);
+
+            RobotState command_joints(CommandJointsRequest const &req, lib::error err);
+
+            void stop_realtime_control(lib::error err);
         } robot_service;
 
         void handle_event(lib::uint32 event_id, lib::error err) override;

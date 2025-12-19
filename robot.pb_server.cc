@@ -217,11 +217,58 @@ namespace a750pb {
                 return;
             }
             RPCServer::ServerErrorHandler handler_err(*this, err);
-            ReadJointsResponse resp = robot_service.read_joints(handler_err);
+            RobotState resp = robot_service.read_state(handler_err);
             if (err || handler_err) {
                 return;
             }
             send_reply_msg(conn, resp, err);
+            if (err) {
+                return;
+            }
+            break;
+        }
+        case 13: {
+            serialrpc::skip(conn, err);
+            if (err) {
+                return;
+            }
+            RPCServer::ServerErrorHandler handler_err(*this, err);
+            RobotState resp = robot_service.start_realtime_control(handler_err);
+            if (err || handler_err) {
+                return;
+            }
+            send_reply_msg(conn, resp, err);
+            if (err) {
+                return;
+            }
+            break;
+        }
+        case 14: {
+            CommandJointsRequest msg = serialrpc::unmarshal<CommandJointsRequest>(conn, err);
+            if (err) {
+                return;
+            }
+            RPCServer::ServerErrorHandler handler_err(*this, err);
+            RobotState resp = robot_service.command_joints(msg, handler_err);
+            if (err || handler_err) {
+                return;
+            }
+            send_reply_msg(conn, resp, err);
+            if (err) {
+                return;
+            }
+            break;
+        }
+        case 15: {
+            serialrpc::skip(conn, err);
+            if (err) {
+                return;
+            }
+            robot_service.stop_realtime_control(RPCServer::ServerErrorHandler(*this, err));
+            if (err) {
+                return;
+            }
+            send_reply_void(conn, err);
             if (err) {
                 return;
             }
