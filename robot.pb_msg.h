@@ -139,7 +139,7 @@ namespace a750pb {
 
         bool operator==(const LogItem& other) const;
 
-        lib::str text = {};
+        lib::InlineString<256> text = {};
 
         static const uint32_t TextFieldNumber = 1;
     };
@@ -155,7 +155,7 @@ namespace a750pb {
 
         float vel_rad_s = {};
 
-        float torque_rad_s = {};
+        float torque_nm = {};
 
         int32_t temp_mosfet_c = {};
 
@@ -165,7 +165,7 @@ namespace a750pb {
 
         static const uint32_t VelRadSFieldNumber = 2;
 
-        static const uint32_t TorqueRadSFieldNumber = 3;
+        static const uint32_t TorqueNmFieldNumber = 3;
 
         static const uint32_t TempMosfetCFieldNumber = 4;
 
@@ -230,6 +230,8 @@ namespace a750pb {
 
         float vel_gain_nms_rad = {};
 
+        float acc_rad_s_s = {};
+
         float torque_nm = {};
 
         static const uint32_t PosSetpointRadFieldNumber = 1;
@@ -239,6 +241,8 @@ namespace a750pb {
         static const uint32_t VelSetpointRadSFieldNumber = 3;
 
         static const uint32_t VelGainNmsRadFieldNumber = 4;
+
+        static const uint32_t AccRadSSFieldNumber = 6;
 
         static const uint32_t TorqueNmFieldNumber = 5;
     };

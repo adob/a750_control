@@ -14,4 +14,6 @@ namespace a750_control {
 
       void connect(lib::str device_path, lib::error err);
     } ;
+
+    void set_high_thread_priority(lib::error);
 }

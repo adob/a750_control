@@ -72,7 +72,7 @@ service CANService {
 }
 
 message LogItem {
-    string text = 1;
+    bytes text = 1 [(bytes_size) = 256];
 }
 
 service LogService {
@@ -84,7 +84,7 @@ service LogService {
 message Joint {
     float pos_rad       = 1;
     float vel_rad_s     = 2;
-    float torque_rad_s  = 3;
+    float torque_nm     = 3;
     int32 temp_mosfet_c = 4;
     int32 temp_rotor_c  = 5;
 }
@@ -113,6 +113,8 @@ message JointCommand {
 
     float vel_setpoint_rad_s = 3;
     float vel_gain_nms_rad = 4;
+
+    float acc_rad_s_s = 6;
 
     float torque_nm = 5;
 }

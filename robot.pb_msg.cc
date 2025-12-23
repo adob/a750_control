@@ -423,7 +423,7 @@ namespace a750pb {
 
             switch (tag.field_num) {
             case TextFieldNumber:
-                msg.text = serialrpc::unmarshal<lib::str>(in, err, nesting-1);
+                msg.text = serialrpc::unmarshal<lib::InlineString<256>>(in, err, nesting-1);
                 break;
 
             default:
@@ -450,7 +450,7 @@ namespace a750pb {
         if (err) {
             return;
         }
-        serialrpc::marshal_field(out, req.TorqueRadSFieldNumber, req.torque_rad_s, err, nesting-1, stack);
+        serialrpc::marshal_field(out, req.TorqueNmFieldNumber, req.torque_nm, err, nesting-1, stack);
         if (err) {
             return;
         }
@@ -486,8 +486,8 @@ namespace a750pb {
                 msg.vel_rad_s = serialrpc::unmarshal<float>(in, err, nesting-1);
                 break;
 
-            case TorqueRadSFieldNumber:
-                msg.torque_rad_s = serialrpc::unmarshal<float>(in, err, nesting-1);
+            case TorqueNmFieldNumber:
+                msg.torque_nm = serialrpc::unmarshal<float>(in, err, nesting-1);
                 break;
 
             case TempMosfetCFieldNumber:
@@ -512,7 +512,7 @@ namespace a750pb {
     bool Joint::operator==(const Joint& other) const {
         return pos_rad == other.pos_rad
             && vel_rad_s == other.vel_rad_s
-            && torque_rad_s == other.torque_rad_s
+            && torque_nm == other.torque_nm
             && temp_mosfet_c == other.temp_mosfet_c
             && temp_rotor_c == other.temp_rotor_c;
     }
@@ -628,6 +628,10 @@ namespace a750pb {
         if (err) {
             return;
         }
+        serialrpc::marshal_field(out, req.AccRadSSFieldNumber, req.acc_rad_s_s, err, nesting-1, stack);
+        if (err) {
+            return;
+        }
         serialrpc::marshal_field(out, req.TorqueNmFieldNumber, req.torque_nm, err, nesting-1, stack);
         if (err) {
             return;
@@ -664,6 +668,10 @@ namespace a750pb {
                 msg.vel_gain_nms_rad = serialrpc::unmarshal<float>(in, err, nesting-1);
                 break;
 
+            case AccRadSSFieldNumber:
+                msg.acc_rad_s_s = serialrpc::unmarshal<float>(in, err, nesting-1);
+                break;
+
             case TorqueNmFieldNumber:
                 msg.torque_nm = serialrpc::unmarshal<float>(in, err, nesting-1);
                 break;
@@ -684,6 +692,7 @@ namespace a750pb {
             && pos_gain_nm_rad == other.pos_gain_nm_rad
             && vel_setpoint_rad_s == other.vel_setpoint_rad_s
             && vel_gain_nms_rad == other.vel_gain_nms_rad
+            && acc_rad_s_s == other.acc_rad_s_s
             && torque_nm == other.torque_nm;
     }
 
