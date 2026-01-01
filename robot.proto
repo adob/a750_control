@@ -83,7 +83,7 @@ service LogService {
 
 message Joint {
     float pos_rad       = 1;
-    float vel_rad_s     = 2;
+    float vel_rads     = 2;
     float torque_nm     = 3;
     int32 temp_mosfet_c = 4;
     int32 temp_rotor_c  = 5;
@@ -109,12 +109,12 @@ message RobotState {
 
 message JointCommand {
     float pos_setpoint_rad = 1;
-    float pos_gain_nm_rad = 2;
+    float pos_gain_nmrad = 2;
 
-    float vel_setpoint_rad_s = 3;
+    float vel_setpoint_rads = 3;
     float vel_gain_nms_rad = 4;
 
-    float acc_rad_s_s = 6;
+    float acc_radss = 6;
 
     float torque_nm = 5;
 }

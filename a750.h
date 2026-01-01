@@ -11,6 +11,7 @@ namespace a750_control {
     struct Robot {
       std::shared_ptr<lib::serial::Port> conn;
       a750pb::RPCClient client;
+      bool connected = false;
 
       void connect(lib::str device_path, lib::error err);
     } ;

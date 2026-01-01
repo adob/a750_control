@@ -9,6 +9,10 @@ using namespace a750_control;
 
 void a750_control::Robot::connect(str device_path, error err) {
     Robot &r = *this;
+    if (r.connected) {
+        err("already connected");
+        return;
+    }
     r.conn = std::make_shared<serial::Port>(serial::open(device_path, err));
     if (err) {
         return;
@@ -20,8 +24,9 @@ void a750_control::Robot::connect(str device_path, error err) {
     if (err) {
         return;
     }
+    r.connected = true;
 
-    eprint "a750_control: connection established";
+    // eprint "a750_control: connection established";
 }
 
 void a750_control::set_high_thread_priority(error err) {

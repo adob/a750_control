@@ -153,7 +153,7 @@ namespace a750pb {
 
         float pos_rad = {};
 
-        float vel_rad_s = {};
+        float vel_rads = {};
 
         float torque_nm = {};
 
@@ -163,7 +163,7 @@ namespace a750pb {
 
         static const uint32_t PosRadFieldNumber = 1;
 
-        static const uint32_t VelRadSFieldNumber = 2;
+        static const uint32_t VelRadsFieldNumber = 2;
 
         static const uint32_t TorqueNmFieldNumber = 3;
 
@@ -224,25 +224,25 @@ namespace a750pb {
 
         float pos_setpoint_rad = {};
 
-        float pos_gain_nm_rad = {};
+        float pos_gain_nmrad = {};
 
-        float vel_setpoint_rad_s = {};
+        float vel_setpoint_rads = {};
 
         float vel_gain_nms_rad = {};
 
-        float acc_rad_s_s = {};
+        float acc_radss = {};
 
         float torque_nm = {};
 
         static const uint32_t PosSetpointRadFieldNumber = 1;
 
-        static const uint32_t PosGainNmRadFieldNumber = 2;
+        static const uint32_t PosGainNmradFieldNumber = 2;
 
-        static const uint32_t VelSetpointRadSFieldNumber = 3;
+        static const uint32_t VelSetpointRadsFieldNumber = 3;
 
         static const uint32_t VelGainNmsRadFieldNumber = 4;
 
-        static const uint32_t AccRadSSFieldNumber = 6;
+        static const uint32_t AccRadssFieldNumber = 6;
 
         static const uint32_t TorqueNmFieldNumber = 5;
     };

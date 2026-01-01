@@ -446,7 +446,7 @@ namespace a750pb {
         if (err) {
             return;
         }
-        serialrpc::marshal_field(out, req.VelRadSFieldNumber, req.vel_rad_s, err, nesting-1, stack);
+        serialrpc::marshal_field(out, req.VelRadsFieldNumber, req.vel_rads, err, nesting-1, stack);
         if (err) {
             return;
         }
@@ -482,8 +482,8 @@ namespace a750pb {
                 msg.pos_rad = serialrpc::unmarshal<float>(in, err, nesting-1);
                 break;
 
-            case VelRadSFieldNumber:
-                msg.vel_rad_s = serialrpc::unmarshal<float>(in, err, nesting-1);
+            case VelRadsFieldNumber:
+                msg.vel_rads = serialrpc::unmarshal<float>(in, err, nesting-1);
                 break;
 
             case TorqueNmFieldNumber:
@@ -511,7 +511,7 @@ namespace a750pb {
 
     bool Joint::operator==(const Joint& other) const {
         return pos_rad == other.pos_rad
-            && vel_rad_s == other.vel_rad_s
+            && vel_rads == other.vel_rads
             && torque_nm == other.torque_nm
             && temp_mosfet_c == other.temp_mosfet_c
             && temp_rotor_c == other.temp_rotor_c;
@@ -616,11 +616,11 @@ namespace a750pb {
         if (err) {
             return;
         }
-        serialrpc::marshal_field(out, req.PosGainNmRadFieldNumber, req.pos_gain_nm_rad, err, nesting-1, stack);
+        serialrpc::marshal_field(out, req.PosGainNmradFieldNumber, req.pos_gain_nmrad, err, nesting-1, stack);
         if (err) {
             return;
         }
-        serialrpc::marshal_field(out, req.VelSetpointRadSFieldNumber, req.vel_setpoint_rad_s, err, nesting-1, stack);
+        serialrpc::marshal_field(out, req.VelSetpointRadsFieldNumber, req.vel_setpoint_rads, err, nesting-1, stack);
         if (err) {
             return;
         }
@@ -628,7 +628,7 @@ namespace a750pb {
         if (err) {
             return;
         }
-        serialrpc::marshal_field(out, req.AccRadSSFieldNumber, req.acc_rad_s_s, err, nesting-1, stack);
+        serialrpc::marshal_field(out, req.AccRadssFieldNumber, req.acc_radss, err, nesting-1, stack);
         if (err) {
             return;
         }
@@ -656,20 +656,20 @@ namespace a750pb {
                 msg.pos_setpoint_rad = serialrpc::unmarshal<float>(in, err, nesting-1);
                 break;
 
-            case PosGainNmRadFieldNumber:
-                msg.pos_gain_nm_rad = serialrpc::unmarshal<float>(in, err, nesting-1);
+            case PosGainNmradFieldNumber:
+                msg.pos_gain_nmrad = serialrpc::unmarshal<float>(in, err, nesting-1);
                 break;
 
-            case VelSetpointRadSFieldNumber:
-                msg.vel_setpoint_rad_s = serialrpc::unmarshal<float>(in, err, nesting-1);
+            case VelSetpointRadsFieldNumber:
+                msg.vel_setpoint_rads = serialrpc::unmarshal<float>(in, err, nesting-1);
                 break;
 
             case VelGainNmsRadFieldNumber:
                 msg.vel_gain_nms_rad = serialrpc::unmarshal<float>(in, err, nesting-1);
                 break;
 
-            case AccRadSSFieldNumber:
-                msg.acc_rad_s_s = serialrpc::unmarshal<float>(in, err, nesting-1);
+            case AccRadssFieldNumber:
+                msg.acc_radss = serialrpc::unmarshal<float>(in, err, nesting-1);
                 break;
 
             case TorqueNmFieldNumber:
@@ -689,10 +689,10 @@ namespace a750pb {
 
     bool JointCommand::operator==(const JointCommand& other) const {
         return pos_setpoint_rad == other.pos_setpoint_rad
-            && pos_gain_nm_rad == other.pos_gain_nm_rad
-            && vel_setpoint_rad_s == other.vel_setpoint_rad_s
+            && pos_gain_nmrad == other.pos_gain_nmrad
+            && vel_setpoint_rads == other.vel_setpoint_rads
             && vel_gain_nms_rad == other.vel_gain_nms_rad
-            && acc_rad_s_s == other.acc_rad_s_s
+            && acc_radss == other.acc_radss
             && torque_nm == other.torque_nm;
     }
 
