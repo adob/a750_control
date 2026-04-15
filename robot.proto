@@ -57,6 +57,7 @@ message CANFrame {
     bytes  data = 2 [(bytes_size) = 64];
 
     bool fd = 3;
+    bool extended = 4;
 }
 
 message CANRecvRequest {
@@ -105,6 +106,8 @@ message RobotState {
     Joint joint4 = 5;
     Joint joint5 = 6;
     Joint joint6 = 7;
+
+    Joint gripper = 8;
 }
 
 message JointCommand {
@@ -119,6 +122,18 @@ message JointCommand {
     float torque_nm = 5;
 }
 
+// message GripperCommand {
+//     float pos_mm = 1;
+//     float pos_gain_nm_mm = 2;
+
+//     float vel_setpoint_mms = 3;
+//     float vel_gain_nms_mm = 4;
+
+//     float acc_mmss = 6;
+
+//     float torque_nm = 5;
+// }
+
 message CommandJointsRequest {
     JointCommand joint1 = 1;
     JointCommand joint2 = 2;
@@ -126,6 +141,8 @@ message CommandJointsRequest {
     JointCommand joint4 = 4;
     JointCommand joint5 = 5;
     JointCommand joint6 = 6;
+    
+    JointCommand gripper = 7;
 }
 
 service RobotService {

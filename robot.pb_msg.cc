@@ -318,6 +318,10 @@ namespace a750pb {
         if (err) {
             return;
         }
+        serialrpc::marshal_field(out, req.ExtendedFieldNumber, req.extended, err, nesting-1, stack);
+        if (err) {
+            return;
+        }
     }
 
     CANFrame CANFrame::unmarshal(lib::io::Reader &in, lib::error err, int nesting) {
@@ -346,6 +350,10 @@ namespace a750pb {
                 msg.fd = serialrpc::unmarshal<bool>(in, err, nesting-1);
                 break;
 
+            case ExtendedFieldNumber:
+                msg.extended = serialrpc::unmarshal<bool>(in, err, nesting-1);
+                break;
+
             default:
                 serialrpc::skip(in, tag.type, err, nesting-1);
                 if (err) {
@@ -360,7 +368,8 @@ namespace a750pb {
     bool CANFrame::operator==(const CANFrame& other) const {
         return id == other.id
             && data == other.data
-            && fd == other.fd;
+            && fd == other.fd
+            && extended == other.extended;
     }
 
     void CANRecvRequest::marshal(CANRecvRequest const &req, lib::io::Writer &out, lib::error err, int nesting, serialrpc::Stack &stack) {
@@ -546,6 +555,10 @@ namespace a750pb {
         if (err) {
             return;
         }
+        serialrpc::marshal_field(out, req.GripperFieldNumber, req.gripper, err, nesting-1, stack);
+        if (err) {
+            return;
+        }
     }
 
     RobotState RobotState::unmarshal(lib::io::Reader &in, lib::error err, int nesting) {
@@ -590,6 +603,10 @@ namespace a750pb {
                 msg.joint6 = serialrpc::unmarshal<Joint>(in, err, nesting-1);
                 break;
 
+            case GripperFieldNumber:
+                msg.gripper = serialrpc::unmarshal<Joint>(in, err, nesting-1);
+                break;
+
             default:
                 serialrpc::skip(in, tag.type, err, nesting-1);
                 if (err) {
@@ -608,7 +625,8 @@ namespace a750pb {
             && joint3 == other.joint3
             && joint4 == other.joint4
             && joint5 == other.joint5
-            && joint6 == other.joint6;
+            && joint6 == other.joint6
+            && gripper == other.gripper;
     }
 
     void JointCommand::marshal(JointCommand const &req, lib::io::Writer &out, lib::error err, int nesting, serialrpc::Stack &stack) {
@@ -721,6 +739,10 @@ namespace a750pb {
         if (err) {
             return;
         }
+        serialrpc::marshal_field(out, req.GripperFieldNumber, req.gripper, err, nesting-1, stack);
+        if (err) {
+            return;
+        }
     }
 
     CommandJointsRequest CommandJointsRequest::unmarshal(lib::io::Reader &in, lib::error err, int nesting) {
@@ -761,6 +783,10 @@ namespace a750pb {
                 msg.joint6 = serialrpc::unmarshal<JointCommand>(in, err, nesting-1);
                 break;
 
+            case GripperFieldNumber:
+                msg.gripper = serialrpc::unmarshal<JointCommand>(in, err, nesting-1);
+                break;
+
             default:
                 serialrpc::skip(in, tag.type, err, nesting-1);
                 if (err) {
@@ -778,7 +804,8 @@ namespace a750pb {
             && joint3 == other.joint3
             && joint4 == other.joint4
             && joint5 == other.joint5
-            && joint6 == other.joint6;
+            && joint6 == other.joint6
+            && gripper == other.gripper;
     }
 
 

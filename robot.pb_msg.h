@@ -117,11 +117,15 @@ namespace a750pb {
 
         bool fd = {};
 
+        bool extended = {};
+
         static const uint32_t IdFieldNumber = 1;
 
         static const uint32_t DataFieldNumber = 2;
 
         static const uint32_t FdFieldNumber = 3;
+
+        static const uint32_t ExtendedFieldNumber = 4;
     };
 
     struct CANRecvRequest {
@@ -200,6 +204,8 @@ namespace a750pb {
 
         Joint joint6 = {};
 
+        Joint gripper = {};
+
         static const uint32_t ModeFieldNumber = 1;
 
         static const uint32_t Joint1FieldNumber = 2;
@@ -213,6 +219,8 @@ namespace a750pb {
         static const uint32_t Joint5FieldNumber = 6;
 
         static const uint32_t Joint6FieldNumber = 7;
+
+        static const uint32_t GripperFieldNumber = 8;
     };
 
     struct JointCommand {
@@ -266,6 +274,8 @@ namespace a750pb {
 
         JointCommand joint6 = {};
 
+        JointCommand gripper = {};
+
         static const uint32_t Joint1FieldNumber = 1;
 
         static const uint32_t Joint2FieldNumber = 2;
@@ -277,6 +287,8 @@ namespace a750pb {
         static const uint32_t Joint5FieldNumber = 5;
 
         static const uint32_t Joint6FieldNumber = 6;
+
+        static const uint32_t GripperFieldNumber = 7;
     };
 
     struct EchoService {
