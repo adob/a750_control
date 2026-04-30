@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+import "serialrpc.proto";
+
+package a750;
+
+message CANFrame {
+    uint32 id   = 1;
+    bytes  data = 2 [(bytes_size) = 64];
+
+    bool fd = 3;
+    bool extended = 4;
+}
+
+message CANRecvRequest {
+
+}
+
+service CANService {
+    option (uuid) = "6711976b-c8c5-40db-af66-69f537301207";
+
+    rpc send(CANFrame) returns (Nothing) { option (method_id) = 1; }
+
+    rpc recv(CANRecvRequest) returns (stream CANFrame) { option (method_id) = 2; }
+}

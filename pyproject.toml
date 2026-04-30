@@ -1,0 +1,16 @@
+[build-system]
+requires = [
+  "scikit-build-core>=0.10",
+  "pybind11>=3.0.1",
+]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "a750-control"
+version = "0.0.0"
+description = "Python bindings for the a750_control robotic arm library"
+requires-python = ">=3.10"
+
+[tool.scikit-build]
+cmake.build-type = "Release"
+wheel.packages = ["python/a750_control"]

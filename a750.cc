@@ -1,8 +1,8 @@
 #include "a750.h"
 
+#include "serialrpc/client.h"
+
 #include "lib/print.h"
-#include "lib/serial/serial_linux.h"
-#include <memory>
 
 using namespace lib;
 using namespace a750_control;
@@ -13,20 +13,13 @@ void a750_control::Robot::connect(str device_path, error err) {
         err("already connected");
         return;
     }
-    r.conn = std::make_shared<serial::Port>(serial::open(device_path, err));
+
+    r.rpc_conn = serialrpc::connect(device_path, {&r.robot_service}, err);
     if (err) {
         return;
     }
 
-    r.client.init(r.conn);
-    
-    client.start(err);
-    if (err) {
-        return;
-    }
     r.connected = true;
-
-    // eprint "a750_control: connection established";
 }
 
 void a750_control::set_high_thread_priority(error err) {
@@ -40,7 +33,23 @@ void a750_control::set_high_thread_priority(error err) {
         .sched_priority = thread_priority,
     };
     if (pthread_setschedparam(pthread_self(), SCHED_FIFO, &thread_param) != 0) {
-        err("lunable to set realtime scheduling: ", strerror(errno));
+        err("unable to set realtime scheduling: ", strerror(errno));
         return;
   }
+}
+void a750_control::Robot::disconnect(error err) {
+    Robot &r = *this;
+    if (!r.connected) {
+        err("not connected");
+        return;
+    }
+
+    r.rpc_conn->close(err);
+    if (err) {
+        return;
+    }
+    
+    r.rpc_conn = nil;
+    r.robot_service = {};
+    r.connected = false;
 }

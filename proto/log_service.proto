@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+import "serialrpc.proto";
+
+package serialrpc;
+
+message LogItem {
+    bytes text = 1 [(bytes_size) = 256];
+}
+
+service LogService {
+    option (uuid) = "b6fd9ea4-9c27-4250-9329-33487b02737e";
+
+    rpc recv(Nothing) returns (stream LogItem) { option (method_id) = 1; }
+}

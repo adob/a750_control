@@ -1,0 +1,1 @@
+PKGCONFIG = ['pybind11', 'python3']
