@@ -40,14 +40,14 @@ service DebugService {
     option (uuid) = "6f3cb468-94eb-4a2c-8fbf-d13cffbbf070";
 
     rpc echo(EchoRequest) returns (EchoResponse) { option (method_id) = 1; }
-    rpc sleep(SleepRequest) returns (Nothing) { option(method_id) = 2; }
+    rpc sleep(SleepRequest) returns (void) { option(method_id) = 2; }
 
-    rpc memory_write(WriteRequest) returns (Nothing) { option(method_id) = 3; }
+    rpc memory_write(WriteRequest) returns (void) { option(method_id) = 3; }
     rpc memory_read(ReadRequest) returns (ReadResult) { option(method_id) = 4; }
     
-    rpc storage_write(WriteRequest) returns (Nothing) { option(method_id) = 5; }
+    rpc storage_write(WriteRequest) returns (void) { option(method_id) = 5; }
     rpc storage_read(ReadRequest) returns (ReadResult) { option(method_id) = 6; }
 
-    rpc reboot(Nothing) returns (Nothing) { option(method_id) = 7; }
-    rpc jump(JumpRequest) returns (Nothing) { option(method_id) = 8; }
+    rpc reboot(void) returns (void) { option(method_id) = 7; }
+    rpc jump(JumpRequest) returns (void) { option(method_id) = 8; }
 }

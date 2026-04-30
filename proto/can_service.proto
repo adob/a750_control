@@ -19,7 +19,7 @@ message CANRecvRequest {
 service CANService {
     option (uuid) = "6711976b-c8c5-40db-af66-69f537301207";
 
-    rpc send(CANFrame) returns (Nothing) { option (method_id) = 1; }
+    rpc send(CANFrame) returns (void) { option (method_id) = 1; }
 
     rpc recv(CANRecvRequest) returns (stream CANFrame) { option (method_id) = 2; }
 }

@@ -16,14 +16,14 @@ CPMAddPackage(
   NAME baselib
   GITHUB_REPOSITORY adob/baselib
   VERSION 0.0.0
-  GIT_TAG 6470a8516b529194700ccf7eabe503936488b205
+  GIT_TAG 36f6c17ea5fcf481d9d6849566a980ca82b7d6e3
 )
 
 CPMAddPackage(
   NAME serialrpc
   GITHUB_REPOSITORY adob/serialrpc
   VERSION 0.0.0
-  GIT_TAG 4253bea8338762de53dab1778b53563f640c6b66
+  GIT_TAG 4a2a932e188b495ea6b4ff94135fa8b087b60db4
 )
 
 CPMFindPackage(
@@ -45,6 +45,7 @@ file(GLOB A750_CONTROL_PROTO_FILES CONFIGURE_DEPENDS
 )
 
 set(A750_CONTROL_SERIALRPC_PROTO_DIR ${serialrpc_SOURCE_DIR})
+set(A750_CONTROL_PROTO_DIR ${CMAKE_CURRENT_LIST_DIR}/proto)
 set(A750_CONTROL_GENERATED_DIR ${CMAKE_CURRENT_LIST_DIR}/generated)
 set(A750_CONTROL_GENERATED_PROTO_DIR ${A750_CONTROL_GENERATED_DIR}/proto)
 
@@ -77,8 +78,8 @@ foreach(proto_file IN LISTS A750_CONTROL_PROTO_FILES)
       ${proto_generated_headers}
     COMMAND protobuf::protoc
       --plugin=protoc-gen-serialrpc=$<TARGET_FILE:serialrpcgen_plugin>
-      --serialrpc_out=${A750_CONTROL_GENERATED_DIR}/proto
-      -I=${CMAKE_CURRENT_LIST_DIR}
+      --serialrpc_out=${A750_CONTROL_GENERATED_PROTO_DIR}
+      -I=${A750_CONTROL_PROTO_DIR}
       -I=${A750_CONTROL_SERIALRPC_PROTO_DIR}
       ${proto_file}
     DEPENDS

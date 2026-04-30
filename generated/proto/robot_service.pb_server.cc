@@ -7,8 +7,7 @@
 using namespace lib;
 
 namespace a750pb {
-    void RobotServiceBase::dispatch_read_state(void *service, serial::Conn &conn, int rpc_id, lib::error err) {
-        serialrpc::skip(conn, err);
+    void RobotServiceBase::dispatch_read_state(void *service, lib::serial::Conn &conn, int rpc_id, lib::error err) {
         if (err) {
             return;
         }
@@ -23,8 +22,7 @@ namespace a750pb {
         }
     }
 
-    void RobotServiceBase::dispatch_start_realtime_control(void *service, serial::Conn &conn, int rpc_id, lib::error err) {
-        serialrpc::skip(conn, err);
+    void RobotServiceBase::dispatch_start_realtime_control(void *service, lib::serial::Conn &conn, int rpc_id, lib::error err) {
         if (err) {
             return;
         }
@@ -39,7 +37,7 @@ namespace a750pb {
         }
     }
 
-    void RobotServiceBase::dispatch_command_joints(void *service, serial::Conn &conn, int rpc_id, lib::error err) {
+    void RobotServiceBase::dispatch_command_joints(void *service, lib::serial::Conn &conn, int rpc_id, lib::error err) {
         CommandJointsRequest msg = serialrpc::unmarshal<CommandJointsRequest>(conn, err);
         if (err) {
             return;
@@ -55,8 +53,7 @@ namespace a750pb {
         }
     }
 
-    void RobotServiceBase::dispatch_stop_realtime_control(void *service, serial::Conn &conn, int rpc_id, lib::error err) {
-        serialrpc::skip(conn, err);
+    void RobotServiceBase::dispatch_stop_realtime_control(void *service, lib::serial::Conn &conn, int rpc_id, lib::error err) {
         if (err) {
             return;
         }

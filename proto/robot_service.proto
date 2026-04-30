@@ -58,8 +58,8 @@ message CommandJointsRequest {
 service RobotService {
     option (uuid) = "3f540d57-8294-472e-bc2e-2d77dd11e186";
     
-    rpc read_state(Nothing) returns (RobotState) { option (method_id) = 1; }
-    rpc start_realtime_control(Nothing) returns (RobotState) { option (method_id) = 1; }
-    rpc stop_realtime_control(Nothing) returns (Nothing) { option (method_id) = 2; }
+    rpc read_state(void) returns (RobotState) { option (method_id) = 1; }
+    rpc start_realtime_control(void) returns (RobotState) { option (method_id) = 1; }
+    rpc stop_realtime_control(void) returns (void) { option (method_id) = 2; }
     rpc command_joints(CommandJointsRequest) returns (RobotState) { option (method_id) = 1; }
 }

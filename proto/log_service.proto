@@ -11,5 +11,5 @@ message LogItem {
 service LogService {
     option (uuid) = "b6fd9ea4-9c27-4250-9329-33487b02737e";
 
-    rpc recv(Nothing) returns (stream LogItem) { option (method_id) = 1; }
+    rpc recv(void) returns (stream LogItem) { option (method_id) = 1; }
 }
