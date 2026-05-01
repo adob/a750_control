@@ -14,9 +14,6 @@
 #include "lib/time/time.h"
 #include "lib/math/math.h"
 
-#include "lib/print.h"
-#include "lib/utils.h"
-
 namespace py = pybind11;
 using namespace lib;
 
@@ -436,8 +433,6 @@ namespace a750 {
         }
     } ;
 }
-
-
 
 struct PyRobot {
     explicit PyRobot(std::string_view device_path)
