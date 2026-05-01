@@ -6,7 +6,7 @@
 #include <string_view>
 
 #include "../a750.h"
-#include "a750_control/generated/proto/robot_service.pb_msg.h"
+#include "../generated/proto/robot_service.pb_msg.h"
 #include "lib/error.h"
 #include "lib/fmt/fmt.h"
 #include "lib/sync/lock.h"
