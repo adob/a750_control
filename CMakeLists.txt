@@ -64,7 +64,31 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_L
   )
 endif()
 
-find_package(Python3 REQUIRED COMPONENTS Interpreter Development.Module)
+set(A750_CONTROL_IS_TOP_LEVEL OFF)
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+  set(A750_CONTROL_IS_TOP_LEVEL ON)
+endif()
+
+set(A750_CONTROL_EXCLUDE_FROM_ALL_DEFAULT OFF)
+if(NOT A750_CONTROL_IS_TOP_LEVEL)
+  set(A750_CONTROL_EXCLUDE_FROM_ALL_DEFAULT ON)
+endif()
+
+option(
+  A750_CONTROL_EXCLUDE_FROM_ALL
+  "Exclude a750_control targets from the default all target"
+  ${A750_CONTROL_EXCLUDE_FROM_ALL_DEFAULT}
+)
+
+option(
+  A750_CONTROL_BUILD_PYTHON
+  "Build the a750_control Python extension"
+  ${A750_CONTROL_IS_TOP_LEVEL}
+)
+
+if(A750_CONTROL_BUILD_PYTHON)
+  find_package(Python3 REQUIRED COMPONENTS Interpreter Development.Module)
+endif()
 
 include(cmake/CPM.cmake)
 
@@ -73,13 +97,15 @@ CPMAddPackage(
   GITHUB_REPOSITORY adob/baselib
   VERSION 0.0.0
   GIT_TAG 36f6c17ea5fcf481d9d6849566a980ca82b7d6e3
+  EXCLUDE_FROM_ALL ${A750_CONTROL_EXCLUDE_FROM_ALL}
 )
 
 CPMAddPackage(
   NAME serialrpc
   GITHUB_REPOSITORY adob/serialrpc
   VERSION 0.0.0
-  GIT_TAG 858d629417523858680ca6a98527703e8217955d
+  GIT_TAG bb8bcd4100c58f18c8a351ecc8f1570cd85dda35
+  EXCLUDE_FROM_ALL ${A750_CONTROL_EXCLUDE_FROM_ALL}
 )
 
 CPMFindPackage(
@@ -87,18 +113,22 @@ CPMFindPackage(
   VERSION 32.1.0
   GITHUB_REPOSITORY protocolbuffers/protobuf
   GIT_TAG v32.1
+  EXCLUDE_FROM_ALL ${A750_CONTROL_EXCLUDE_FROM_ALL}
   OPTIONS
     "protobuf_BUILD_TESTS OFF"
     "protobuf_BUILD_CONFORMANCE OFF"
     "protobuf_BUILD_EXAMPLES OFF"
 )
 
-CPMFindPackage(
-  NAME pybind11
-  GITHUB_REPOSITORY pybind/pybind11
-  VERSION 3.0.1
-  GIT_TAG v3.0.1
-)
+if(A750_CONTROL_BUILD_PYTHON)
+  CPMFindPackage(
+    NAME pybind11
+    GITHUB_REPOSITORY pybind/pybind11
+    VERSION 3.0.1
+    GIT_TAG v3.0.1
+    EXCLUDE_FROM_ALL ${A750_CONTROL_EXCLUDE_FROM_ALL}
+  )
+endif()
 
 file(GLOB A750_CONTROL_PROTO_FILES CONFIGURE_DEPENDS
   ${CMAKE_CURRENT_LIST_DIR}/proto/*.proto
@@ -177,6 +207,10 @@ add_library(${PROJECT_NAME} STATIC
     ${SOURCES}
 )
 
+if(A750_CONTROL_EXCLUDE_FROM_ALL)
+  set_property(TARGET ${PROJECT_NAME} PROPERTY EXCLUDE_FROM_ALL TRUE)
+endif()
+
 add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_23)
@@ -198,20 +232,26 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 
 add_dependencies(${PROJECT_NAME} serialrpcgen_plugin)
 
-pybind11_add_module(_native MODULE
-  python/bindings.cc
-)
+if(A750_CONTROL_BUILD_PYTHON)
+  pybind11_add_module(_native MODULE
+    python/bindings.cc
+  )
 
-target_link_libraries(_native PRIVATE
-  Python3::Module
-  serialrpc::serialrpc
-  baselib::baselib
-  ${PROJECT_NAME}::${PROJECT_NAME}
-)
+  if(A750_CONTROL_EXCLUDE_FROM_ALL)
+    set_property(TARGET _native PROPERTY EXCLUDE_FROM_ALL TRUE)
+  endif()
 
-target_compile_features(_native PRIVATE cxx_std_23)
+  target_link_libraries(_native PRIVATE
+    Python3::Module
+    serialrpc::serialrpc
+    baselib::baselib
+    ${PROJECT_NAME}::${PROJECT_NAME}
+  )
 
-install(TARGETS _native
-  LIBRARY DESTINATION a750_control
-  RUNTIME DESTINATION a750_control
-)
+  target_compile_features(_native PRIVATE cxx_std_23)
+
+  install(TARGETS _native
+    LIBRARY DESTINATION a750_control
+    RUNTIME DESTINATION a750_control
+  )
+endif()
