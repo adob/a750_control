@@ -33,14 +33,13 @@ void a750_control::set_high_thread_priority(error err) {
         .sched_priority = thread_priority,
     };
     if (pthread_setschedparam(pthread_self(), SCHED_FIFO, &thread_param) != 0) {
-        err("unable to set realtime scheduling: ", strerror(errno));
+        err("unable to set realtime scheduling: %v", strerror(errno));
         return;
   }
 }
 void a750_control::Robot::disconnect(error err) {
     Robot &r = *this;
     if (!r.connected) {
-        err("not connected");
         return;
     }
 
