@@ -55,7 +55,6 @@ namespace a750 {
         math::deg2rad(225.f)
     };
 
-
     float gripper_pos_rad_to_m(float pos_rad) {
         return 0.06f + pos_rad * GripperMPerRad;
     }
@@ -245,6 +244,10 @@ namespace a750 {
 
             c.command_age = MaxCommandAge;
             c.stop_requested.store(false);
+            c.current_state = a750::convert_robot_state(c.robot.robot_service.read_state(err));
+            if (err) {
+                return;
+            }
             c.control_loop = sync::go([&] {
                 c.loop([&](const lib::Error& e) { c.handle_error(e); });
             });
@@ -359,9 +362,9 @@ namespace a750 {
             }
 
             command.gripper = convert_gripper_command(GripperCommand{
-                .pos_setpoint_m = gripper_pos_m_to_rad(pos_m),
+                .pos_setpoint_m = float(pos_m),
                 .vel_setpoint_ms = 0,
-                .pos_gain_n_per_m = DefaultPositionGain[6],
+                .pos_gain_n_per_m = -1,
                 .vel_gain_ns_per_m = 0,
                 .acc_mss = 0,
                 .force_n = 0
