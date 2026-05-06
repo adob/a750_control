@@ -1,0 +1,1 @@
+pip install -e . -Cbuild-dir=build/python -Ccmake.args="-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
