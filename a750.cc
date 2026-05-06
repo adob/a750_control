@@ -1,8 +1,8 @@
 #include "a750.h"
 
 #include "serialrpc/client.h"
+#include "lib/os/error.h"
 
-#include "lib/print.h"
 
 using namespace lib;
 using namespace a750_control;
@@ -23,9 +23,9 @@ void a750_control::Robot::connect(str device_path, error err) {
 }
 
 void a750_control::set_high_thread_priority(error err) {
-    const int thread_priority = sched_get_priority_max(SCHED_FIFO);
+    int thread_priority = sched_get_priority_max(SCHED_FIFO);
     if (thread_priority == -1) {
-        err("unable to get maximum possible thread priority: %s", strerror(errno));
+        err(os::SyscallError("sched_get_priority_max", errno));
         return;
     }
 
@@ -33,7 +33,7 @@ void a750_control::set_high_thread_priority(error err) {
         .sched_priority = thread_priority,
     };
     if (pthread_setschedparam(pthread_self(), SCHED_FIFO, &thread_param) != 0) {
-        err("unable to set realtime scheduling: %v", strerror(errno));
+        err(os::SyscallError("pthread_setschedparam", errno));
         return;
   }
 }

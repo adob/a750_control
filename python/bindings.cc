@@ -249,6 +249,12 @@ namespace a750 {
                 return;
             }
             c.control_loop = sync::go([&] {
+                ErrorRecorder err;
+                a750_control::set_high_thread_priority(err);
+                if (err) {
+                    fmt::fprintf(os::stderr, "warning: a750_control: unable to set high thread priority: %s\n", err.msg);
+                }
+                
                 c.loop([&](const lib::Error& e) { c.handle_error(e); });
             });
         }
@@ -445,12 +451,6 @@ struct PyRobot {
     a750::ControlLoop control_loop;
         
     void connect(this PyRobot& p) {
-        ErrorRecorder err;
-        a750_control::set_high_thread_priority(err);
-        if (err) {
-            fmt::fprintf(os::stderr, "warning: a750_control: unable to set high thread priority: %s\n", err.msg);
-        }
-
         p.control_loop.connect(p.device_path, py_err_handler);
     }
 
