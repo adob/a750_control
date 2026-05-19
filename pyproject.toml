@@ -7,10 +7,24 @@ build-backend = "scikit_build_core.build"
 
 [project]
 name = "a750-control"
-version = "0.0.0"
+version = "0.1.1"
 description = "Python bindings for the a750_control robotic arm library"
+readme = "README.md"
 requires-python = ">=3.10"
+license = "MIT"
+authors = [
+  { name = "Aleksandr Dobkin" },
+]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Operating System :: POSIX :: Linux",
+]
+
+[project.urls]
+Repository = "https://github.com/adob/a750_control"
 
 [tool.scikit-build]
 cmake.build-type = "Release"
+cmake.args = ["-DBUILD_TESTING=OFF"]
 wheel.packages = ["python/a750_control"]

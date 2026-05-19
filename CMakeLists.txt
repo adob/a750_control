@@ -42,7 +42,7 @@ get_filename_component(
   NAME
 )
 
-project(a750_control VERSION 0.0.0 LANGUAGES CXX)
+project(a750_control VERSION 0.1.1 LANGUAGES CXX)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
@@ -96,7 +96,7 @@ CPMAddPackage(
   NAME baselib
   GITHUB_REPOSITORY adob/baselib
   VERSION 0.0.0
-  GIT_TAG 36f6c17ea5fcf481d9d6849566a980ca82b7d6e3
+  GIT_TAG 59be23e0cc4f61ecae709d4be99751c5130db761
   EXCLUDE_FROM_ALL ${A750_CONTROL_EXCLUDE_FROM_ALL}
 )
 

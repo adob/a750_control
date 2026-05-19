@@ -1,3 +1,22 @@
-__pycache__
-build
+__pycache__/
+*.py[cod]
+
+# Local Python environments
+.venv/
+venv/
+
+# Build outputs
+build/
+dist/
+wheelhouse/
+*.egg-info/
+
+# cibuildwheel/local release staging
+.cibw_local/
+
+# Local tooling state
+.cache/
+.codex/
+.agents/
+
 compile_commands.json
