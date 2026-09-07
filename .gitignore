@@ -10,6 +10,8 @@ build/
 dist/
 wheelhouse/
 *.egg-info/
+install/
+log/
 
 # cibuildwheel/local release staging
 .cibw_local/
