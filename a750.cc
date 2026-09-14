@@ -1,7 +1,11 @@
 #include "a750.h"
 
 #include "serialrpc/client.h"
-#include "lib/os/error.h"
+import lib.os.error;
+import lib.types;
+#include <cerrno>
+#include <pthread.h>
+#include <sched.h>
 
 
 using namespace lib;

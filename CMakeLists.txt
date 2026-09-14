@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.30)
 
 set(A750_CONTROL_CXX_COMPILER_OK OFF)
 
@@ -96,7 +96,7 @@ CPMAddPackage(
   NAME baselib
   GITHUB_REPOSITORY adob/baselib
   VERSION 0.0.0
-  GIT_TAG 59be23e0cc4f61ecae709d4be99751c5130db761
+  GIT_TAG aac03db111a5c89ff95a9f0a8b2512f6112b4248
   EXCLUDE_FROM_ALL ${A750_CONTROL_EXCLUDE_FROM_ALL}
 )
 
@@ -104,7 +104,7 @@ CPMAddPackage(
   NAME serialrpc
   GITHUB_REPOSITORY adob/serialrpc
   VERSION 0.0.0
-  GIT_TAG bb8bcd4100c58f18c8a351ecc8f1570cd85dda35
+  GIT_TAG 1fdc3256dd41cf8c6814050f3f6de3610de0854d
   EXCLUDE_FROM_ALL ${A750_CONTROL_EXCLUDE_FROM_ALL}
 )
 
@@ -203,34 +203,30 @@ endforeach()
 
 list(APPEND SOURCES ${A750_CONTROL_GENERATED_SOURCES})
 
-add_library(${PROJECT_NAME} STATIC
-    ${SOURCES}
-)
-
-if(A750_CONTROL_EXCLUDE_FROM_ALL)
-  set_property(TARGET ${PROJECT_NAME} PROPERTY EXCLUDE_FROM_ALL TRUE)
-endif()
+buildtool_register_project(a750_control_sources SOURCE_ROOT "${CMAKE_CURRENT_LIST_DIR}")
+target_compile_features(a750_control_sources PUBLIC cxx_std_23)
+target_link_libraries(a750_control_sources PUBLIC serialrpc_sources)
+buildtool_add_library(${PROJECT_NAME}
+  LIBRARY a750_control_sources PUBLIC_MODULES
+  SOURCES ${SOURCES})
 
 add_library(${PROJECT_NAME}::${PROJECT_NAME} ALIAS ${PROJECT_NAME})
 
-target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_23)
 
 get_filename_component(_parent_dir
   "${CMAKE_CURRENT_LIST_DIR}/.."
   REALPATH
 )
 
-target_include_directories(${PROJECT_NAME} PUBLIC
+target_include_directories(a750_control_sources PUBLIC
   $<BUILD_INTERFACE:${_parent_dir}>
   $<INSTALL_INTERFACE:include>
 )
 
-target_link_libraries(${PROJECT_NAME} PRIVATE 
-  baselib::baselib
-  serialrpc::serialrpc
-)
-
-add_dependencies(${PROJECT_NAME} serialrpcgen_plugin)
+# Generate every RPC input before buildtool discovers header dependencies.
+add_custom_target(a750_control_generate_protocol
+  DEPENDS ${A750_CONTROL_GENERATED_SOURCES} ${A750_CONTROL_GENERATED_HEADERS})
+add_dependencies(${PROJECT_NAME}_build a750_control_generate_protocol serialrpc_generate_protocol)
 
 if(A750_CONTROL_BUILD_PYTHON)
   pybind11_add_module(_native MODULE
@@ -243,7 +239,7 @@ if(A750_CONTROL_BUILD_PYTHON)
 
   target_link_libraries(_native PRIVATE
     Python3::Module
-    serialrpc::serialrpc
+    serialrpc::client
     baselib::baselib
     ${PROJECT_NAME}::${PROJECT_NAME}
   )

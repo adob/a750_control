@@ -3,16 +3,20 @@
 
 #pragma once
 
-#include <array>
-#include <cstdint>
-#include <functional>
-#include "lib/error.h"
-#include "lib/inline_string.h"
-#include "lib/io/io.h"
 #include "serialrpc/encoding.h"
+#include "serialrpc/method_info.h"
+#include "serialrpc/service_info.h"
+import <array>;
+import <cstdint>;
+import <functional>;
+import lib.error;
+import lib.inline_string;
+import lib.io;
 
 namespace serialrpcpb {
     struct LogItem {
+        static const serialrpc::TypeInfo Info;
+
         static void marshal(LogItem const &req, lib::io::Writer &out, lib::error err, int nesting, serialrpc::Stack &stack);
 
         static LogItem unmarshal(lib::io::Reader &in, lib::error err, int nesting = 128);
@@ -24,15 +28,36 @@ namespace serialrpcpb {
         static const uint32_t TextFieldNumber = 1;
     };
 
+    inline const serialrpc::TypeInfo LogItem::Info = {
+    .kind = serialrpc::TypeKind::Message,
+    .name = "serialrpc.LogItem",
+    .fields = {
+        {"text", 1, &serialrpc::TypeBytes, false},
+    },
+};
+namespace detail {
+    inline constexpr std::array<serialrpc::TypeInfo const*, 2> log_5fservice_2eproto_LogService_types = {{
+        &serialrpc::TypeVoid,
+        &::serialrpcpb::LogItem::Info,
+    }};
+}
+
     struct LogService {
-        static constexpr char ServiceName[] = "LogService";
-
         // uuid: b6fd9ea4-9c27-4250-9329-33487b02737e
-        static constexpr std::array<uint8_t, 16> UUID = {0xb6, 0xfd, 0x9e, 0xa4, 0x9c, 0x27, 0x42, 0x50, 0x93, 0x29, 0x33, 0x48, 0x7b, 0x02, 0x73, 0x7e};
+        static constexpr serialrpc::ServiceInfo Info = {
+            "LogService",
+            "serialrpc",
+            {0xb6, 0xfd, 0x9e, 0xa4, 0x9c, 0x27, 0x42, 0x50, 0x93, 0x29, 0x33, 0x48, 0x7b, 0x02, 0x73, 0x7e},
+            0,
+            0,
+            1,
+        };
 
-        static const int MajorVersion = 0;
+        static constexpr std::array<serialrpc::MethodInfo, 1> Methods = {{
+            {"recv", 1, &serialrpc::TypeVoid, &::serialrpcpb::LogItem::Info, false, true},
+        }};
 
-        static const int MinorVersion = 0;
+        static constexpr auto const& Types = detail::log_5fservice_2eproto_LogService_types;
 
         virtual void subscribe_recv(std::function<void(LogItem const&)> const &cb, lib::error err) = 0;
 

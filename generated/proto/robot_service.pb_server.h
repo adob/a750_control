@@ -3,14 +3,14 @@
 
 #pragma once
 
-#include <array>
-#include <cstdint>
-#include <functional>
-#include "lib/error.h"
-#include "lib/inline_string.h"
-#include "lib/io/io.h"
 #include "serialrpc/server.h"
 #include "robot_service.pb_msg.h"
+import <array>;
+import <cstdint>;
+import <functional>;
+import lib.error;
+import lib.inline_string;
+import lib.io;
 
 namespace a750pb {
     struct RobotServiceBase : RobotService {
@@ -20,15 +20,15 @@ namespace a750pb {
 
         static void dispatch_start_realtime_control(void *service, lib::serial::Conn &conn, int rpc_id, lib::error err);
 
-        static void dispatch_command_joints(void *service, lib::serial::Conn &conn, int rpc_id, lib::error err);
-
         static void dispatch_stop_realtime_control(void *service, lib::serial::Conn &conn, int rpc_id, lib::error err);
+
+        static void dispatch_command_joints(void *service, lib::serial::Conn &conn, int rpc_id, lib::error err);
 
         static constexpr std::array<serialrpc::DispatchFunc, 4> dispatch_table = {
             dispatch_read_state,
             dispatch_start_realtime_control,
-            dispatch_command_joints,
             dispatch_stop_realtime_control,
+            dispatch_command_joints,
         };
 
         RobotServiceBase* service_ptr();

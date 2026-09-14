@@ -2,8 +2,8 @@
 
 #include <memory>
 
-#include "lib/base.h"
-#include "lib/serial/serial_linux.h"
+import lib.str;
+import lib.error;
 #include "generated/proto/robot_service.pb_client.h"
 
 namespace a750_control {

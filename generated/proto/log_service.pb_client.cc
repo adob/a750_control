@@ -8,22 +8,22 @@ using namespace lib;
 
 namespace serialrpcpb {
     LogServiceStub::LogServiceStub() {
-        this->uuid = str(LogService::UUID);
-        this->major_version = LogService::MajorVersion;
-        this->minor_version = LogService::MinorVersion;
-        this->name = LogService::ServiceName;
+        this->uuid = str(LogService::Info.uuid);
+        this->major_version = LogService::Info.major_version;
+        this->minor_version = LogService::Info.minor_version;
+        this->name = LogService::Info.name;
     }
 
     void LogServiceStub::subscribe_recv(std::function<void(LogItem const&)> const &cb, lib::error err) {
         uint32 event_id = 0 + this->rpc_offset;
         this->recv_cb = cb;
         this->client->register_event_callback(event_id, std::bind(&LogServiceStub::handle_recv, this, std::placeholders::_1, std::placeholders::_2));
-        this->client->subscribe(event_id, ServiceName, "recv", err);
+        this->client->subscribe(event_id, Info.name, "recv", err);
     }
 
     void LogServiceStub::unsubscribe_recv(lib::error err) {
         uint32 event_id = 0 + this->rpc_offset;
-        this->client->unsubscribe(event_id, ServiceName, "recv", err);
+        this->client->unsubscribe(event_id, Info.name, "recv", err);
         if (err) {
             return;
         }

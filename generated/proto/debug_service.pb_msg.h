@@ -3,16 +3,20 @@
 
 #pragma once
 
-#include <array>
-#include <cstdint>
-#include <functional>
-#include "lib/error.h"
-#include "lib/inline_string.h"
-#include "lib/io/io.h"
 #include "serialrpc/encoding.h"
+#include "serialrpc/method_info.h"
+#include "serialrpc/service_info.h"
+import <array>;
+import <cstdint>;
+import <functional>;
+import lib.error;
+import lib.inline_string;
+import lib.io;
 
 namespace serialrpcpb {
     struct EchoRequest {
+        static const serialrpc::TypeInfo Info;
+
         static void marshal(EchoRequest const &req, lib::io::Writer &out, lib::error err, int nesting, serialrpc::Stack &stack);
 
         static EchoRequest unmarshal(lib::io::Reader &in, lib::error err, int nesting = 128);
@@ -25,6 +29,8 @@ namespace serialrpcpb {
     };
 
     struct EchoResponse {
+        static const serialrpc::TypeInfo Info;
+
         static void marshal(EchoResponse const &req, lib::io::Writer &out, lib::error err, int nesting, serialrpc::Stack &stack);
 
         static EchoResponse unmarshal(lib::io::Reader &in, lib::error err, int nesting = 128);
@@ -37,6 +43,8 @@ namespace serialrpcpb {
     };
 
     struct SleepRequest {
+        static const serialrpc::TypeInfo Info;
+
         static void marshal(SleepRequest const &req, lib::io::Writer &out, lib::error err, int nesting, serialrpc::Stack &stack);
 
         static SleepRequest unmarshal(lib::io::Reader &in, lib::error err, int nesting = 128);
@@ -49,6 +57,8 @@ namespace serialrpcpb {
     };
 
     struct WriteRequest {
+        static const serialrpc::TypeInfo Info;
+
         static void marshal(WriteRequest const &req, lib::io::Writer &out, lib::error err, int nesting, serialrpc::Stack &stack);
 
         static WriteRequest unmarshal(lib::io::Reader &in, lib::error err, int nesting = 128);
@@ -69,6 +79,8 @@ namespace serialrpcpb {
     };
 
     struct ReadRequest {
+        static const serialrpc::TypeInfo Info;
+
         static void marshal(ReadRequest const &req, lib::io::Writer &out, lib::error err, int nesting, serialrpc::Stack &stack);
 
         static ReadRequest unmarshal(lib::io::Reader &in, lib::error err, int nesting = 128);
@@ -89,6 +101,8 @@ namespace serialrpcpb {
     };
 
     struct ReadResult {
+        static const serialrpc::TypeInfo Info;
+
         static void marshal(ReadResult const &req, lib::io::Writer &out, lib::error err, int nesting, serialrpc::Stack &stack);
 
         static ReadResult unmarshal(lib::io::Reader &in, lib::error err, int nesting = 128);
@@ -101,6 +115,8 @@ namespace serialrpcpb {
     };
 
     struct JumpRequest {
+        static const serialrpc::TypeInfo Info;
+
         static void marshal(JumpRequest const &req, lib::io::Writer &out, lib::error err, int nesting, serialrpc::Stack &stack);
 
         static JumpRequest unmarshal(lib::io::Reader &in, lib::error err, int nesting = 128);
@@ -112,15 +128,95 @@ namespace serialrpcpb {
         static const uint32_t AddressFieldNumber = 1;
     };
 
+    inline const serialrpc::TypeInfo EchoRequest::Info = {
+    .kind = serialrpc::TypeKind::Message,
+    .name = "serialrpc.EchoRequest",
+    .fields = {
+        {"n", 1, &serialrpc::TypeInt32, false},
+    },
+};
+inline const serialrpc::TypeInfo EchoResponse::Info = {
+    .kind = serialrpc::TypeKind::Message,
+    .name = "serialrpc.EchoResponse",
+    .fields = {
+        {"n", 1, &serialrpc::TypeInt32, false},
+    },
+};
+inline const serialrpc::TypeInfo SleepRequest::Info = {
+    .kind = serialrpc::TypeKind::Message,
+    .name = "serialrpc.SleepRequest",
+    .fields = {
+        {"duration_ms", 1, &serialrpc::TypeUint32, false},
+    },
+};
+inline const serialrpc::TypeInfo WriteRequest::Info = {
+    .kind = serialrpc::TypeKind::Message,
+    .name = "serialrpc.WriteRequest",
+    .fields = {
+        {"address", 1, &serialrpc::TypeUint64, false},
+        {"data", 2, &serialrpc::TypeBytes, false},
+        {"disk", 3, &serialrpc::TypeBytes, false},
+    },
+};
+inline const serialrpc::TypeInfo ReadRequest::Info = {
+    .kind = serialrpc::TypeKind::Message,
+    .name = "serialrpc.ReadRequest",
+    .fields = {
+        {"address", 1, &serialrpc::TypeUint64, false},
+        {"length", 2, &serialrpc::TypeUint32, false},
+        {"disk", 3, &serialrpc::TypeBytes, false},
+    },
+};
+inline const serialrpc::TypeInfo ReadResult::Info = {
+    .kind = serialrpc::TypeKind::Message,
+    .name = "serialrpc.ReadResult",
+    .fields = {
+        {"data", 2, &serialrpc::TypeBytes, false},
+    },
+};
+inline const serialrpc::TypeInfo JumpRequest::Info = {
+    .kind = serialrpc::TypeKind::Message,
+    .name = "serialrpc.JumpRequest",
+    .fields = {
+        {"address", 1, &serialrpc::TypeUint64, false},
+    },
+};
+namespace detail {
+    inline constexpr std::array<serialrpc::TypeInfo const*, 8> debug_5fservice_2eproto_DebugService_types = {{
+        &::serialrpcpb::EchoRequest::Info,
+        &::serialrpcpb::EchoResponse::Info,
+        &::serialrpcpb::SleepRequest::Info,
+        &serialrpc::TypeVoid,
+        &::serialrpcpb::WriteRequest::Info,
+        &::serialrpcpb::ReadRequest::Info,
+        &::serialrpcpb::ReadResult::Info,
+        &::serialrpcpb::JumpRequest::Info,
+    }};
+}
+
     struct DebugService {
-        static constexpr char ServiceName[] = "DebugService";
-
         // uuid: 6f3cb468-94eb-4a2c-8fbf-d13cffbbf070
-        static constexpr std::array<uint8_t, 16> UUID = {0x6f, 0x3c, 0xb4, 0x68, 0x94, 0xeb, 0x4a, 0x2c, 0x8f, 0xbf, 0xd1, 0x3c, 0xff, 0xbb, 0xf0, 0x70};
+        static constexpr serialrpc::ServiceInfo Info = {
+            "DebugService",
+            "serialrpc",
+            {0x6f, 0x3c, 0xb4, 0x68, 0x94, 0xeb, 0x4a, 0x2c, 0x8f, 0xbf, 0xd1, 0x3c, 0xff, 0xbb, 0xf0, 0x70},
+            0,
+            0,
+            8,
+        };
 
-        static const int MajorVersion = 0;
+        static constexpr std::array<serialrpc::MethodInfo, 8> Methods = {{
+            {"echo", 1, &::serialrpcpb::EchoRequest::Info, &::serialrpcpb::EchoResponse::Info, false, false},
+            {"sleep", 2, &::serialrpcpb::SleepRequest::Info, &serialrpc::TypeVoid, false, false},
+            {"memory_write", 3, &::serialrpcpb::WriteRequest::Info, &serialrpc::TypeVoid, false, false},
+            {"memory_read", 4, &::serialrpcpb::ReadRequest::Info, &::serialrpcpb::ReadResult::Info, false, false},
+            {"storage_write", 5, &::serialrpcpb::WriteRequest::Info, &serialrpc::TypeVoid, false, false},
+            {"storage_read", 6, &::serialrpcpb::ReadRequest::Info, &::serialrpcpb::ReadResult::Info, false, false},
+            {"reboot", 7, &serialrpc::TypeVoid, &serialrpc::TypeVoid, false, false},
+            {"jump", 8, &::serialrpcpb::JumpRequest::Info, &serialrpc::TypeVoid, false, false},
+        }};
 
-        static const int MinorVersion = 0;
+        static constexpr auto const& Types = detail::debug_5fservice_2eproto_DebugService_types;
 
         virtual EchoResponse echo(EchoRequest const &req, lib::error err) = 0;
 

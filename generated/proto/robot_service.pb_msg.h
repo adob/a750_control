@@ -3,16 +3,20 @@
 
 #pragma once
 
-#include <array>
-#include <cstdint>
-#include <functional>
-#include "lib/error.h"
-#include "lib/inline_string.h"
-#include "lib/io/io.h"
 #include "serialrpc/encoding.h"
+#include "serialrpc/method_info.h"
+#include "serialrpc/service_info.h"
+import <array>;
+import <cstdint>;
+import <functional>;
+import lib.error;
+import lib.inline_string;
+import lib.io;
 
 namespace a750pb {
     struct Joint {
+        static const serialrpc::TypeInfo Info;
+
         static void marshal(Joint const &req, lib::io::Writer &out, lib::error err, int nesting, serialrpc::Stack &stack);
 
         static Joint unmarshal(lib::io::Reader &in, lib::error err, int nesting = 128);
@@ -41,6 +45,8 @@ namespace a750pb {
     };
 
     struct RobotState {
+        static const serialrpc::TypeInfo Info;
+
         enum Mode {
             Startup = 0,
             Enabled = 1,
@@ -88,6 +94,8 @@ namespace a750pb {
     };
 
     struct JointCommand {
+        static const serialrpc::TypeInfo Info;
+
         static void marshal(JointCommand const &req, lib::io::Writer &out, lib::error err, int nesting, serialrpc::Stack &stack);
 
         static JointCommand unmarshal(lib::io::Reader &in, lib::error err, int nesting = 128);
@@ -120,6 +128,8 @@ namespace a750pb {
     };
 
     struct CommandJointsRequest {
+        static const serialrpc::TypeInfo Info;
+
         static void marshal(CommandJointsRequest const &req, lib::io::Writer &out, lib::error err, int nesting, serialrpc::Stack &stack);
 
         static CommandJointsRequest unmarshal(lib::io::Reader &in, lib::error err, int nesting = 128);
@@ -155,15 +165,98 @@ namespace a750pb {
         static const uint32_t GripperFieldNumber = 7;
     };
 
+    namespace detail {
+    inline const serialrpc::TypeInfo robot_5fservice_2eproto_type_a750_2eRobotState_2eMode = {
+        .kind = serialrpc::TypeKind::Enum,
+        .name = "a750.RobotState.Mode",
+        .enumValues = {
+            {"Startup", 0},
+            {"Enabled", 1},
+            {"Stopped", 2},
+            {"Fault", 3},
+        },
+    };
+}
+inline const serialrpc::TypeInfo Joint::Info = {
+    .kind = serialrpc::TypeKind::Message,
+    .name = "a750.Joint",
+    .fields = {
+        {"pos_rad", 1, &serialrpc::TypeFloat, false},
+        {"vel_rads", 2, &serialrpc::TypeFloat, false},
+        {"torque_nm", 3, &serialrpc::TypeFloat, false},
+        {"temp_mosfet_c", 4, &serialrpc::TypeInt32, false},
+        {"temp_rotor_c", 5, &serialrpc::TypeInt32, false},
+    },
+};
+inline const serialrpc::TypeInfo RobotState::Info = {
+    .kind = serialrpc::TypeKind::Message,
+    .name = "a750.RobotState",
+    .fields = {
+        {"mode", 1, &detail::robot_5fservice_2eproto_type_a750_2eRobotState_2eMode, false},
+        {"joint1", 2, &::a750pb::Joint::Info, false},
+        {"joint2", 3, &::a750pb::Joint::Info, false},
+        {"joint3", 4, &::a750pb::Joint::Info, false},
+        {"joint4", 5, &::a750pb::Joint::Info, false},
+        {"joint5", 6, &::a750pb::Joint::Info, false},
+        {"joint6", 7, &::a750pb::Joint::Info, false},
+        {"gripper", 8, &::a750pb::Joint::Info, false},
+    },
+};
+inline const serialrpc::TypeInfo JointCommand::Info = {
+    .kind = serialrpc::TypeKind::Message,
+    .name = "a750.JointCommand",
+    .fields = {
+        {"pos_setpoint_rad", 1, &serialrpc::TypeFloat, false},
+        {"pos_gain_nmrad", 2, &serialrpc::TypeFloat, false},
+        {"vel_setpoint_rads", 3, &serialrpc::TypeFloat, false},
+        {"vel_gain_nms_rad", 4, &serialrpc::TypeFloat, false},
+        {"acc_radss", 6, &serialrpc::TypeFloat, false},
+        {"torque_nm", 5, &serialrpc::TypeFloat, false},
+    },
+};
+inline const serialrpc::TypeInfo CommandJointsRequest::Info = {
+    .kind = serialrpc::TypeKind::Message,
+    .name = "a750.CommandJointsRequest",
+    .fields = {
+        {"joint1", 1, &::a750pb::JointCommand::Info, false},
+        {"joint2", 2, &::a750pb::JointCommand::Info, false},
+        {"joint3", 3, &::a750pb::JointCommand::Info, false},
+        {"joint4", 4, &::a750pb::JointCommand::Info, false},
+        {"joint5", 5, &::a750pb::JointCommand::Info, false},
+        {"joint6", 6, &::a750pb::JointCommand::Info, false},
+        {"gripper", 7, &::a750pb::JointCommand::Info, false},
+    },
+};
+namespace detail {
+    inline constexpr std::array<serialrpc::TypeInfo const*, 6> robot_5fservice_2eproto_RobotService_types = {{
+        &serialrpc::TypeVoid,
+        &::a750pb::RobotState::Info,
+        &::a750pb::Joint::Info,
+        &::a750pb::CommandJointsRequest::Info,
+        &::a750pb::JointCommand::Info,
+        &robot_5fservice_2eproto_type_a750_2eRobotState_2eMode,
+    }};
+}
+
     struct RobotService {
-        static constexpr char ServiceName[] = "RobotService";
-
         // uuid: 3f540d57-8294-472e-bc2e-2d77dd11e186
-        static constexpr std::array<uint8_t, 16> UUID = {0x3f, 0x54, 0x0d, 0x57, 0x82, 0x94, 0x47, 0x2e, 0xbc, 0x2e, 0x2d, 0x77, 0xdd, 0x11, 0xe1, 0x86};
+        static constexpr serialrpc::ServiceInfo Info = {
+            "RobotService",
+            "a750",
+            {0x3f, 0x54, 0x0d, 0x57, 0x82, 0x94, 0x47, 0x2e, 0xbc, 0x2e, 0x2d, 0x77, 0xdd, 0x11, 0xe1, 0x86},
+            1,
+            0,
+            4,
+        };
 
-        static const int MajorVersion = 0;
+        static constexpr std::array<serialrpc::MethodInfo, 4> Methods = {{
+            {"read_state", 1, &serialrpc::TypeVoid, &::a750pb::RobotState::Info, false, false},
+            {"start_realtime_control", 2, &serialrpc::TypeVoid, &::a750pb::RobotState::Info, false, false},
+            {"stop_realtime_control", 3, &serialrpc::TypeVoid, &serialrpc::TypeVoid, false, false},
+            {"command_joints", 4, &::a750pb::CommandJointsRequest::Info, &::a750pb::RobotState::Info, false, false},
+        }};
 
-        static const int MinorVersion = 0;
+        static constexpr auto const& Types = detail::robot_5fservice_2eproto_RobotService_types;
 
         virtual RobotState read_state(lib::error err) = 0;
 

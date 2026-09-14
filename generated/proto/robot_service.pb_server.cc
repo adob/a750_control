@@ -37,6 +37,21 @@ namespace a750pb {
         }
     }
 
+    void RobotServiceBase::dispatch_stop_realtime_control(void *service, lib::serial::Conn &conn, int rpc_id, lib::error err) {
+        if (err) {
+            return;
+        }
+        serialrpc::ServerErrorHandler handler_err(conn, err);
+        static_cast<RobotServiceBase*>(service)->stop_realtime_control(handler_err);
+        if (handler_err) {
+            return;
+        }
+        serialrpc::send_reply_void(conn, err);
+        if (err) {
+            return;
+        }
+    }
+
     void RobotServiceBase::dispatch_command_joints(void *service, lib::serial::Conn &conn, int rpc_id, lib::error err) {
         CommandJointsRequest msg = serialrpc::unmarshal<CommandJointsRequest>(conn, err);
         if (err) {
@@ -48,21 +63,6 @@ namespace a750pb {
             return;
         }
         serialrpc::send_reply_msg(conn, resp, err);
-        if (err) {
-            return;
-        }
-    }
-
-    void RobotServiceBase::dispatch_stop_realtime_control(void *service, lib::serial::Conn &conn, int rpc_id, lib::error err) {
-        if (err) {
-            return;
-        }
-        serialrpc::ServerErrorHandler handler_err(conn, err);
-        static_cast<RobotServiceBase*>(service)->stop_realtime_control(handler_err);
-        if (handler_err) {
-            return;
-        }
-        serialrpc::send_reply_void(conn, err);
         if (err) {
             return;
         }

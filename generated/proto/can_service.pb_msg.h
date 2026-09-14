@@ -3,16 +3,20 @@
 
 #pragma once
 
-#include <array>
-#include <cstdint>
-#include <functional>
-#include "lib/error.h"
-#include "lib/inline_string.h"
-#include "lib/io/io.h"
 #include "serialrpc/encoding.h"
+#include "serialrpc/method_info.h"
+#include "serialrpc/service_info.h"
+import <array>;
+import <cstdint>;
+import <functional>;
+import lib.error;
+import lib.inline_string;
+import lib.io;
 
 namespace a750pb {
     struct CANFrame {
+        static const serialrpc::TypeInfo Info;
+
         static void marshal(CANFrame const &req, lib::io::Writer &out, lib::error err, int nesting, serialrpc::Stack &stack);
 
         static CANFrame unmarshal(lib::io::Reader &in, lib::error err, int nesting = 128);
@@ -37,6 +41,8 @@ namespace a750pb {
     };
 
     struct CANRecvRequest {
+        static const serialrpc::TypeInfo Info;
+
         static void marshal(CANRecvRequest const &req, lib::io::Writer &out, lib::error err, int nesting, serialrpc::Stack &stack);
 
         static CANRecvRequest unmarshal(lib::io::Reader &in, lib::error err, int nesting = 128);
@@ -44,15 +50,47 @@ namespace a750pb {
         bool operator==(const CANRecvRequest& other) const;
     };
 
+    inline const serialrpc::TypeInfo CANFrame::Info = {
+    .kind = serialrpc::TypeKind::Message,
+    .name = "a750.CANFrame",
+    .fields = {
+        {"id", 1, &serialrpc::TypeUint32, false},
+        {"data", 2, &serialrpc::TypeBytes, false},
+        {"fd", 3, &serialrpc::TypeBool, false},
+        {"extended", 4, &serialrpc::TypeBool, false},
+    },
+};
+inline const serialrpc::TypeInfo CANRecvRequest::Info = {
+    .kind = serialrpc::TypeKind::Message,
+    .name = "a750.CANRecvRequest",
+    .fields = {
+    },
+};
+namespace detail {
+    inline constexpr std::array<serialrpc::TypeInfo const*, 3> can_5fservice_2eproto_CANService_types = {{
+        &::a750pb::CANFrame::Info,
+        &serialrpc::TypeVoid,
+        &::a750pb::CANRecvRequest::Info,
+    }};
+}
+
     struct CANService {
-        static constexpr char ServiceName[] = "CANService";
-
         // uuid: 6711976b-c8c5-40db-af66-69f537301207
-        static constexpr std::array<uint8_t, 16> UUID = {0x67, 0x11, 0x97, 0x6b, 0xc8, 0xc5, 0x40, 0xdb, 0xaf, 0x66, 0x69, 0xf5, 0x37, 0x30, 0x12, 0x07};
+        static constexpr serialrpc::ServiceInfo Info = {
+            "CANService",
+            "a750",
+            {0x67, 0x11, 0x97, 0x6b, 0xc8, 0xc5, 0x40, 0xdb, 0xaf, 0x66, 0x69, 0xf5, 0x37, 0x30, 0x12, 0x07},
+            0,
+            0,
+            2,
+        };
 
-        static const int MajorVersion = 0;
+        static constexpr std::array<serialrpc::MethodInfo, 2> Methods = {{
+            {"send", 1, &::a750pb::CANFrame::Info, &serialrpc::TypeVoid, false, false},
+            {"recv", 2, &::a750pb::CANRecvRequest::Info, &::a750pb::CANFrame::Info, false, true},
+        }};
 
-        static const int MinorVersion = 0;
+        static constexpr auto const& Types = detail::can_5fservice_2eproto_CANService_types;
 
         virtual void send(CANFrame const &req, lib::error err) = 0;
 

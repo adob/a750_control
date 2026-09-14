@@ -8,25 +8,25 @@ using namespace lib;
 
 namespace a750pb {
     RobotServiceStub::RobotServiceStub() {
-        this->uuid = str(RobotService::UUID);
-        this->major_version = RobotService::MajorVersion;
-        this->minor_version = RobotService::MinorVersion;
-        this->name = RobotService::ServiceName;
+        this->uuid = str(RobotService::Info.uuid);
+        this->major_version = RobotService::Info.major_version;
+        this->minor_version = RobotService::Info.minor_version;
+        this->name = RobotService::Info.name;
     }
 
     RobotState RobotServiceStub::read_state(lib::error err) {
-        return this->client->call<RobotState>(0 + this->rpc_offset, ServiceName, "read_state", err);
+        return this->client->call<RobotState>(0 + this->rpc_offset, Info.name, "read_state", err);
     }
 
     RobotState RobotServiceStub::start_realtime_control(lib::error err) {
-        return this->client->call<RobotState>(1 + this->rpc_offset, ServiceName, "start_realtime_control", err);
-    }
-
-    RobotState RobotServiceStub::command_joints(CommandJointsRequest const &req, lib::error err) {
-        return this->client->call<CommandJointsRequest const&, RobotState>(2 + this->rpc_offset, ServiceName, "command_joints", req, err);
+        return this->client->call<RobotState>(1 + this->rpc_offset, Info.name, "start_realtime_control", err);
     }
 
     void RobotServiceStub::stop_realtime_control(lib::error err) {
-        this->client->call_void(3 + this->rpc_offset, ServiceName, "stop_realtime_control", err);
+        this->client->call_void(2 + this->rpc_offset, Info.name, "stop_realtime_control", err);
+    }
+
+    RobotState RobotServiceStub::command_joints(CommandJointsRequest const &req, lib::error err) {
+        return this->client->call<CommandJointsRequest const&, RobotState>(3 + this->rpc_offset, Info.name, "command_joints", req, err);
     }
 }

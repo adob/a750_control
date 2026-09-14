@@ -3,14 +3,14 @@
 
 #pragma once
 
-#include <array>
-#include <cstdint>
-#include <functional>
-#include "lib/error.h"
-#include "lib/inline_string.h"
-#include "lib/io/io.h"
 #include "serialrpc/client.h"
 #include "robot_service.pb_msg.h"
+import <array>;
+import <cstdint>;
+import <functional>;
+import lib.error;
+import lib.inline_string;
+import lib.io;
 
 namespace a750pb {
     struct RobotServiceStub : RobotService, serialrpc::Stub {
@@ -20,8 +20,8 @@ namespace a750pb {
 
         RobotState start_realtime_control(lib::error err) override;
 
-        RobotState command_joints(CommandJointsRequest const &req, lib::error err) override;
-
         void stop_realtime_control(lib::error err) override;
+
+        RobotState command_joints(CommandJointsRequest const &req, lib::error err) override;
     };
 }

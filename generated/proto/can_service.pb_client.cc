@@ -8,26 +8,26 @@ using namespace lib;
 
 namespace a750pb {
     CANServiceStub::CANServiceStub() {
-        this->uuid = str(CANService::UUID);
-        this->major_version = CANService::MajorVersion;
-        this->minor_version = CANService::MinorVersion;
-        this->name = CANService::ServiceName;
+        this->uuid = str(CANService::Info.uuid);
+        this->major_version = CANService::Info.major_version;
+        this->minor_version = CANService::Info.minor_version;
+        this->name = CANService::Info.name;
     }
 
     void CANServiceStub::send(CANFrame const &req, lib::error err) {
-        this->client->call_void<CANFrame const&>(0 + this->rpc_offset, ServiceName, "send", req, err);
+        this->client->call_void<CANFrame const&>(0 + this->rpc_offset, Info.name, "send", req, err);
     }
 
     void CANServiceStub::subscribe_recv(CANRecvRequest const &req, std::function<void(CANFrame const&)> const &cb, lib::error err) {
         uint32 event_id = 1 + this->rpc_offset;
         this->recv_cb = cb;
         this->client->register_event_callback(event_id, std::bind(&CANServiceStub::handle_recv, this, std::placeholders::_1, std::placeholders::_2));
-        this->client->subscribe(event_id, ServiceName, "recv", req, err);
+        this->client->subscribe(event_id, Info.name, "recv", req, err);
     }
 
     void CANServiceStub::unsubscribe_recv(lib::error err) {
         uint32 event_id = 1 + this->rpc_offset;
-        this->client->unsubscribe(event_id, ServiceName, "recv", err);
+        this->client->unsubscribe(event_id, Info.name, "recv", err);
         if (err) {
             return;
         }
