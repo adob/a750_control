@@ -252,7 +252,7 @@ namespace a750 {
                 ErrorRecorder err;
                 a750_control::set_high_thread_priority(err);
                 if (err) {
-                    fmt::fprintf(os::stderr, "warning: a750_control: unable to set high thread priority: %s\n", err.msg);
+                    fmt::fprintf(io::err, "warning: a750_control: unable to set high thread priority: %s\n", err.msg);
                 }
                 
                 c.loop([&](const lib::Error& e) { c.handle_error(e); });
